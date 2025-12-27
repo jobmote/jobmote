@@ -10,8 +10,7 @@ let _client;
  */
 export async function getSupabase() {
   if (_client) return _client;
-
-  const res = await fetch("/jobmote/api/config", { cache: "no-store" });
+  const res = await fetch("/api/config", { cache: "no-store" });
   if (!res.ok) throw new Error("Config function failed: " + res.status);
 
   const cfg = await res.json();
