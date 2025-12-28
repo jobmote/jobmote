@@ -52,17 +52,19 @@
       <p class="muted">Account wird über Supabase gespeichert.</p>
 
       <form class="form" id="register-form" autocomplete="on">
-        <div class="field">
-          <label for="register-email">E-Mail</label>
-          <input id="reg-email" type="email" required placeholder="name@beispiel.de" />
-        </div>
+  <div class="field">
+    <label for="reg-email">E-Mail</label>
+    <input id="reg-email" type="email" required placeholder="name@beispiel.de" />
+  </div>
 
-        <div class="field">
-          <label for="register-password">Passwort</label>
-          <input id="reg-password" type="password" required placeholder="mind. 6 Zeichen" minlength="6" />
-        </div>
+  <div class="field">
+    <label for="reg-password">Passwort</label>
+    <input id="reg-password" type="password" required placeholder="mind. 6 Zeichen" minlength="6" />
+  </div>
 
-        <p class="muted small" style="margin-top:6px;">
+  <p class="muted" id="register-msg" role="status" aria-live="polite"></p>
+</form>
+
           Hinweis: Unternehmens-Accounts werden von einem Admin zugewiesen.
         </p>
 
