@@ -1,45 +1,33 @@
-import { getSupabase } from "./supabase.js";
+import { getSupabase } from "/js/supabase.js";
 
-function $(sel) {
-  return document.querySelector(sel);
+function $(id) {
+  return document.getElementById(id);
 }
 
-async function resendSignup(supabase, email) {
-  const { error } = await supabase.auth.resend({ type: "signup", email });
-  return error;
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  if (document.body.dataset.page !== "register") return;
 
-async function ensureLoggedOutIfUnconfirmed(supabase, user) {
-  if (!user?.email_confirmed_at) {
-    await supabase.auth.signOut();
-    return true;
+  const form = $("register-form");
+  const emailInput = $("reg-email");
+  const passwordInput = $("reg-password");
+  const msg = $("register-msg");
+
+  if (!form || !emailInput || !passwordInput) {
+    console.error("❌ Register-Form Elemente nicht gefunden");
+    return;
   }
-  return false;
-}
 
-/**
- * Register page
- */
-async function wireRegister(supabase) {
-  const form = $("#register-form");
-  if (!form) return;
-
-  const msg = $("#register-msg");
+  const supabase = await getSupabase();
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    msg.textContent = "Registrierung läuft…";
 
-    if (msg) msg.textContent = "Registrierung läuft…";
-
-    // accept both possible ids (so you don't depend on route variants)
-    const emailEl = $("#register-email") || $("#reg-email");
-    const passEl = $("#register-password") || $("#reg-password");
-
-    const email = (emailEl?.value || "").trim().toLowerCase();
-    const password = (passEl?.value || "").trim();
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value;
 
     if (!email || password.length < 6) {
-      if (msg) msg.textContent = "Bitte gültige E-Mail + Passwort (mind. 6 Zeichen) eingeben.";
+      msg.textContent = "Bitte gültige E-Mail und Passwort (min. 6 Zeichen)";
       return;
     }
 
@@ -52,119 +40,15 @@ async function wireRegister(supabase) {
     });
 
     if (error) {
-      console.error("[signup error]", error);
-      if (msg) msg.textContent = "Fehler: " + error.message;
+      console.error(error);
+      msg.textContent = "Fehler: " + error.message;
       return;
     }
 
-    // If confirmation is disabled, Supabase may return confirmed user/session.
-    if (data?.user?.email_confirmed_at) {
-      if (msg) msg.textContent = "✅ Account erstellt. Weiterleitung…";
-      window.location.href = "/index.html";
-      return;
-    }
-
-    if (msg) {
-      msg.innerHTML = `
-✅ Account angelegt. Bitte bestätige deine E-Mail (auch Spam).<br/>
-<button id="resend-confirm" type="button">Bestätigung erneut senden</button>
-      `;
-      const btn = document.getElementById("resend-confirm");
-      if (btn) {
-        btn.onclick = async () => {
-          btn.disabled = true;
-          const err = await resendSignup(supabase, email);
-          alert(err ? err.message : "Mail erneut gesendet.");
-          btn.disabled = false;
-        };
-      }
-    }
+    msg.innerHTML = `
+      ✅ Account angelegt.<br>
+      Bitte bestätige deine E-Mail (auch Spam).
+    `;
   });
-}
-
-/**
- * Login page
- */
-async function wireLogin(supabase) {
-  const form = $("#login-form");
-  if (!form) return;
-
-  const msg = $("#login-msg");
-
-  // If user arrives via confirmation link, session might exist already.
-  try {
-    const { data } = await supabase.auth.getSession();
-    const user = data?.session?.user;
-    if (user) {
-      if (await ensureLoggedOutIfUnconfirmed(supabase, user)) {
-        if (msg) msg.textContent = "Bitte erst E-Mail bestätigen.";
-      } else {
-        if (msg) msg.textContent = "✅ Bestätigt & eingeloggt. Weiterleitung…";
-        window.location.href = "/index.html";
-        return;
-      }
-    }
-  } catch {}
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (msg) msg.textContent = "Login läuft…";
-
-    const email = ($("#login-email")?.value || "").trim().toLowerCase();
-    const password = ($("#login-password")?.value || "").trim();
-
-    if (!email || !password) {
-      if (msg) msg.textContent = "Bitte E-Mail + Passwort eingeben.";
-      return;
-    }
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      if (msg) msg.textContent = "Fehler: " + error.message;
-      return;
-    }
-
-    if (await ensureLoggedOutIfUnconfirmed(supabase, data?.user)) {
-      if (msg) {
-        msg.innerHTML = `
-Bitte erst E-Mail bestätigen.<br/>
-<button id="resend-confirm" type="button">Bestätigung erneut senden</button>
-        `;
-        const btn = document.getElementById("resend-confirm");
-        if (btn) {
-          btn.onclick = async () => {
-            btn.disabled = true;
-            const err = await resendSignup(supabase, email);
-            alert(err ? err.message : "Mail erneut gesendet.");
-            btn.disabled = false;
-          };
-        }
-      }
-      return;
-    }
-
-    if (msg) msg.textContent = "✅ Eingeloggt. Weiterleitung…";
-    window.location.href = "/index.html";
-  });
-}
-
-/**
- * Show current email on pages that have #profile-email
- */
-async function wireProfileEmail(supabase) {
-  const el = document.getElementById("profile-email");
-  if (!el) return;
-
-  const { data } = await supabase.auth.getSession();
-  const user = data?.session?.user;
-  el.textContent = user?.email || "Nicht eingeloggt";
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const supabase = await getSupabase();
-
-  await wireRegister(supabase);
-  await wireLogin(supabase);
-  await wireProfileEmail(supabase);
 });
+
