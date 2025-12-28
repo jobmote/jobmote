@@ -30,3 +30,5 @@ export async function getSupabase() {
   return _client;
 }
 ;
+export const supabase = await getSupabase();
+
