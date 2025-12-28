@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/jpeg" href="../assets/favicon.jpg">
+  <title>Admin – jobmote.de</title>
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- Zugriffsschutz (Frontend-Demo): Nur Admin darf /admin öffnen -->
+  <script type="module" src="../js/admin-guard.js"></script>
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <div class="header-left">
+      <a class="brand-link" href="../index.html" aria-label="Startseite">
+        <img src="../assets/favicon.jpg" alt="jobmote.de" class="brand-icon" />
+        jobmote.de
+      </a>
+    </div>
+
+    <div class="header-center">
+      <div class="sr-only">Admin</div>
+    </div>
+
+    <div class="header-right">
+      <button class="icon-btn" id="back-btn" type="button" aria-label="Zurück">←</button>
+    </div>
+  </header>
+
+  <main class="legal-container">
+    <section class="legal-card">
+      <h1>Admin</h1>
+      <p class="muted">Rollenverwaltung, Sperren und Job-Moderation (Supabase).</p>
+
+      <div class="row" style="margin: 10px 0 16px 0;">
+        <button class="btn" id="btn-refresh" type="button">Neu laden</button>
+        <span class="muted" id="admin-msg" style="margin-left:10px;"></span>
+      </div>
+
+      <h2>Nutzer</h2>
+      <div id="users-table" class="notice">–</div>
+
+      <h2>Jobs (Datenbank)</h2>
+      <div id="jobs-table" class="notice" style="margin-top:10px;">–</div>
+
+      <div class="legal-footer">
+        <a class="legal-back" href="../index.html">← Zurück zur Startseite</a>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="../js/core.js"></script>
+  <script type="module" src="../js/auth-session.js"></script>
+  <script defer src="../js/jobs.data.js"></script>
+  <script defer src="../js/jobs.service.js"></script>
+  <script defer src="admin.js"></script>
+</body>
+</html>
