@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hilfe / FAQ – jobmote.de</title>
+  <link rel="icon" type="image/jpeg" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body data-page="faq">
+  <header class="site-header">
+    <div class="header-left">
+      <a class="brand-link" href="index.html" aria-label="Startseite">
+        <img src="assets/favicon.png" alt="jobmote.de" class="brand-icon" />
+        jobmote.de
+      </a>
+    </div>
+
+    <div class="header-center">
+      <form id="site-search-form" class="search-form" action="search.html" method="GET">
+        <input id="site-search-input" class="search-bar" name="q" type="text" placeholder="Suche Jobs, Firmen, Keywords… 🔎" autocomplete="off" />
+      </form>
+    </div>
+
+    <div class="header-right">
+      <button class="icon-btn" id="account-btn" type="button" aria-label="Account">
+        <svg class="icon-svg-user" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button class="icon-btn" id="menu-toggle" type="button" aria-label="Menü öffnen" aria-controls="side-menu" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <div id="menu-overlay" class="menu-overlay" aria-hidden="true"></div>
+
+  <nav id="side-menu" class="side-menu" aria-label="Seitenmenü">
+    <div class="side-menu-header">
+      <span class="side-menu-title">Menü</span>
+      <button class="close-btn" id="menu-close" type="button" aria-label="Menü schließen">✕</button>
+    </div>
+
+    <ul class="menu-list" id="menu-list"></ul>
+  </nav>
+
+  <main class="legal-container">
+    <section class="legal-card">
+      <h1>Hilfe / FAQ</h1>
+
+      <div class="faq">
+        <details open>
+          <summary>Wie speichere ich Jobs?</summary>
+          <p>Klicke bei einem Job auf <strong>★ Job speichern</strong>. Die Favoriten werden im Browser gespeichert (LocalStorage).</p>
+        </details>
+
+        <details>
+          <summary>Brauche ich einen Account?</summary>
+          <p>In dieser Demo nicht zwingend. Für spätere Funktionen (Alerts, Bewerbungen, Firmen-Posting) wäre ein Account notwendig.</p>
+        </details>
+
+        <details>
+          <summary>Wie stelle ich als Unternehmen einen Job ein?</summary>
+          <p>Registriere dich als <strong>Unternehmen</strong> und öffne dann <strong>Job einstellen</strong>. In der Demo wird der Job lokal gespeichert.</p>
+        </details>
+
+        <details>
+          <summary>Ist das eine echte Jobbörse?</summary>
+          <p>Aktuell: Schulprojekt/Demo. Ziel: echte Plattform mit Unternehmensaccounts und Upload-Funktion.</p>
+        </details>
+      </div>
+
+      <div class="legal-footer">
+        <a class="legal-back" href="index.html">← Zurück zur Startseite</a>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="js/core.js"></script>
+  <script defer src="js/theme.js"></script>
+  <script type="module" src="js/auth-session.js"></script>
+  <script defer src="js/jobs.data.js"></script>
+  <script defer src="js/jobs.service.js"></script>
+  <script defer src="js/favorites.v2.js"></script>
+  <script defer src="js/ui.menu.js"></script>
+  <script defer src="js/render.js"></script>
+  <script defer src="js/ui.modal.js"></script>
+  <script defer src="js/page.home.js"></script>
+  <script defer src="js/page.favorites.js"></script>
+  <script defer src="js/page.search.js"></script>
+  <script defer src="js/page.postjob.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>
