@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registrieren – jobmote.de</title>
-  <link rel="icon" type="image/jpeg" href="assets/favicon.png">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 
@@ -19,7 +19,14 @@
 
     <div class="header-center">
       <form id="site-search-form" class="search-form" action="search.html" method="GET">
-        <input id="site-search-input" class="search-bar" name="q" type="text" placeholder="Suche Jobs, Firmen, Keywords… 🔎" autocomplete="off" />
+        <input
+          id="site-search-input"
+          class="search-bar"
+          name="q"
+          type="text"
+          placeholder="Suche Jobs, Firmen, Keywords… 🔎"
+          autocomplete="off"
+        />
       </form>
     </div>
 
@@ -27,11 +34,18 @@
       <button class="icon-btn" id="account-btn" type="button" aria-label="Account">
         <svg class="icon-svg-user" viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="8" r="4"></circle>
-          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
         </svg>
       </button>
 
-      <button class="icon-btn" id="menu-toggle" type="button" aria-label="Menü öffnen" aria-controls="side-menu" aria-expanded="false">☰</button>
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        type="button"
+        aria-label="Menü öffnen"
+        aria-controls="side-menu"
+        aria-expanded="false"
+      >☰</button>
     </div>
   </header>
 
@@ -42,7 +56,6 @@
       <span class="side-menu-title">Menü</span>
       <button class="close-btn" id="menu-close" type="button" aria-label="Menü schließen">✕</button>
     </div>
-
     <ul class="menu-list" id="menu-list"></ul>
   </nav>
 
@@ -52,19 +65,17 @@
       <p class="muted">Account wird über Supabase gespeichert.</p>
 
       <form class="form" id="register-form" autocomplete="on">
-  <div class="field">
-    <label for="reg-email">E-Mail</label>
-    <input id="reg-email" type="email" required placeholder="name@beispiel.de" />
-  </div>
+        <div class="field">
+          <label for="reg-email">E-Mail</label>
+          <input id="reg-email" type="email" required placeholder="name@beispiel.de" />
+        </div>
 
-  <div class="field">
-    <label for="reg-password">Passwort</label>
-    <input id="reg-password" type="password" required placeholder="mind. 6 Zeichen" minlength="6" />
-  </div>
+        <div class="field">
+          <label for="reg-password">Passwort</label>
+          <input id="reg-password" type="password" required minlength="6" placeholder="mind. 6 Zeichen" />
+        </div>
 
-  <p class="muted" id="register-msg" role="status" aria-live="polite"></p>
-</form>
-
+        <p class="muted small" style="margin-top:6px;">
           Hinweis: Unternehmens-Accounts werden von einem Admin zugewiesen.
         </p>
 
@@ -80,8 +91,10 @@
 
   <script defer src="js/core.js"></script>
   <script defer src="js/theme.js"></script>
-  <script type="module" src="js/auth-supabase.js"></script>
   <script defer src="js/ui.menu.js"></script>
   <script defer src="js/ui.modal.js"></script>
+
+  <!-- wichtig: auth als module -->
+  <script type="module" src="js/auth-supabase.js"></script>
 </body>
 </html>
