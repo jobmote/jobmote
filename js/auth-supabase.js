@@ -159,3 +159,44 @@ document.addEventListener("DOMContentLoaded", async () => {
   await wireLogin();
   await wireProfileEmail();
 });
+import { getSupabase } from "./supabase.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const page = document.body.dataset.page;
+  if (page !== "register") return;
+
+  const form = document.getElementById("register-form");
+  const emailInput = document.getElementById("register-email");
+  const passwordInput = document.getElementById("register-password");
+  const msg = document.getElementById("register-msg");
+
+  if (!form || !emailInput || !passwordInput) {
+    console.error("Register form elements not found");
+    return;
+  }
+
+  const supabase = await getSupabase();
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    msg.textContent = "Registrierung läuft…";
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error(error);
+      msg.textContent = error.message;
+      return;
+    }
+
+    msg.textContent =
+      "Registrierung erfolgreich. Bitte bestätige deine E-Mail.";
+  });
+});
