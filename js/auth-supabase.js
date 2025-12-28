@@ -9,8 +9,16 @@ function wireRegister(supabase) {
 
   const form = byId("register-form");
   const msg = byId("register-msg");
-  const emailEl = byId("reg-email");
-  const passEl = byId("reg-password");
+  const emailEl =
+  byId("reg-email") ||
+  byId("register-email") ||
+  byId("email") ||
+  document.querySelector('input[type="email"]');
+  const passEl =
+  byId("reg-password") ||
+  byId("register-password") ||
+  byId("password") ||
+  document.querySelector('input[type="password"]');
 
   console.log("[auth] elements", {
     form: !!form,
