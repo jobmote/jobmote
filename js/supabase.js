@@ -14,17 +14,25 @@ export async function getSupabase() {
   if (!res.ok) throw new Error("Config function failed: " + res.status);
 
   const cfg = await res.json();
-  if (!cfg?.url || !cfg?.anonKey) {
-    throw new Error("Missing SUPABASE_URL / SUPABASE_ANON_KEY in Netlify environment variables");
+
+  // accept both shapes:
+  // - { url, anonKey } (your current /api/config)
+  // - { SUPABASE_URL, SUPABASE_ANON_KEY } (alternate)
+  const url = cfg?.url || cfg?.SUPABASE_URL;
+  const anonKey = cfg?.anonKey || cfg?.SUPABASE_ANON_KEY;
+
+  if (!url || !anonKey) {
+    throw new Error("Supabase config missing. Expected {url, anonKey} or {SUPABASE_URL, SUPABASE_ANON_KEY}. Got: " + JSON.stringify(cfg));
   }
 
-  _client = createClient(cfg.url, cfg.anonKey, {
+  _client = createClient(url, anonKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: true
     }
   });
+
 
   return _client;
 }
