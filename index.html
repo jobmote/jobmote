@@ -251,37 +251,3 @@
 </body>
 </html>
 
-<script type="module">
-  import { supabase } from "/js/supabase.js";
-
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-
-  document.getElementById("signup").onclick = async () => {
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
-    const { error } = await supabase.auth.signUp({ email, password });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("Registrierung erfolgreich. Bitte bestätige deine E-Mail-Adresse.");
-    }
-  };
-
-  document.getElementById("login").onclick = async () => {
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      window.location.href = "/jobs.html";
-    }
-  };
-</script>
-
-
