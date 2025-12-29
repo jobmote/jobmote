@@ -37,6 +37,12 @@
   }
 
   JM.initMenu = async function initMenu() {
+    if (window.__JM_MENU_INIT__) return;
+window.__JM_MENU_INIT__ = true;
+
+const list = document.getElementById("menu-list");
+if (list) list.innerHTML = "";
+
     const menuToggle = JM.$("#menu-toggle");
     const sideMenu = JM.$("#side-menu");
     const overlay = JM.$("#menu-overlay");
