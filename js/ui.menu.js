@@ -37,135 +37,107 @@
   }
 
   JM.initMenu = async function initMenu() {
-  const menuToggle = JM.$("#menu-toggle");
-  const sideMenu = JM.$("#side-menu");
-  const overlay = JM.$("#menu-overlay");
-  const menuClose = JM.$("#menu-close");
-
-  // Wenn Grund-DOM fehlt -> einfach abbrechen (OHNE globalen init-guard!)
-  if (!menuToggle || !sideMenu || !overlay || !menuClose) return;
-
-  function openMenu() {
-    sideMenu.classList.add("active");
-    overlay.classList.add("active");
-    menuToggle.setAttribute("aria-expanded", "true");
-  }
-  function closeMenu() {
-    sideMenu.classList.remove("active");
-    overlay.classList.remove("active");
-    menuToggle.setAttribute("aria-expanded", "false");
-  }
-
-  // ✅ 1) Event-Binding nur einmal
-  if (!window.__JM_MENU_BOUND__) {
-    window.__JM_MENU_BOUND__ = true;
-
-    menuToggle.addEventListener("click", () => {
-      const isOpen = sideMenu.classList.contains("active");
-      if (isOpen) closeMenu(); else openMenu();
-    });
-    menuClose.addEventListener("click", closeMenu);
-    overlay.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
-    });
-
-    JM.$("#account-btn")?.addEventListener("click", async () => {
-      if (JM.authReady) {
-        try { await JM.authReady; } catch {}
-      }
-      const u = JM.getCurrentUser?.();
-      window.location.href = u ? "favorites.html" : "login.html";
-    });
-  }
-
-  // ✅ 2) Menü-Inhalt jedes Mal sauber neu bauen (oder optional: guard fürs rendern)
-  const list = JM.$("#menu-list");
-  if (!list) return;
-  list.innerHTML = "";
-
     const menuToggle = JM.$("#menu-toggle");
     const sideMenu = JM.$("#side-menu");
     const overlay = JM.$("#menu-overlay");
     const menuClose = JM.$("#menu-close");
+    const list = JM.$("#menu-list");
+
+    // Wenn Grund-DOM fehlt: abbrechen (kein globaler init-guard!)
+    if (!menuToggle || !sideMenu || !overlay || !menuClose || !list) return;
 
     function openMenu() {
-      sideMenu?.classList.add("active");
-      overlay?.classList.add("active");
-      menuToggle?.setAttribute("aria-expanded", "true");
+      sideMenu.classList.add("active");
+      overlay.classList.add("active");
+      menuToggle.setAttribute("aria-expanded", "true");
     }
     function closeMenu() {
-      sideMenu?.classList.remove("active");
-      overlay?.classList.remove("active");
-      menuToggle?.setAttribute("aria-expanded", "false");
+      sideMenu.classList.remove("active");
+      overlay.classList.remove("active");
+      menuToggle.setAttribute("aria-expanded", "false");
     }
 
-    menuToggle?.addEventListener("click", () => {
-      const isOpen = sideMenu?.classList.contains("active");
-      if (isOpen) closeMenu(); else openMenu();
-    });
-    menuClose?.addEventListener("click", closeMenu);
-    overlay?.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
-    });
+    // ✅ Events nur einmal binden
+    if (!window.__JM_MENU_BOUND__) {
+      window.__JM_MENU_BOUND__ = true;
 
-    const list = JM.$("#menu-list");
-    if (list) {
-      list.innerHTML = "";
-      list.appendChild(renderThemeSwitchItem());
+      menuToggle.addEventListener("click", () => {
+        const isOpen = sideMenu.classList.contains("active");
+        if (isOpen) closeMenu(); else openMenu();
+      });
 
-      list.appendChild(renderMenuLink("Startseite", "index.html"));
-      list.appendChild(renderMenuLink("Suche", "search.html"));
-      list.appendChild(renderMenuSep());
+      menuClose.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
 
-      // Wait for Supabase session/profile to be loaded
-      if (JM.authReady) {
-        try { await JM.authReady; } catch {}
-      }
-      const user = JM.getCurrentUser?.();
-      if (user) {
-        list.appendChild(renderMenuLink("Gespeicherte Jobs", "favorites.html"));
-        if (JM.isEntrepreneur?.()) {
-          list.appendChild(renderMenuLink("Meine Inserate", "my-posted-jobs.html"));
-          list.appendChild(renderMenuLink("Job einstellen", "post-job.html"));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMenu();
+      });
+
+      JM.$("#account-btn")?.addEventListener("click", async () => {
+        if (JM.authReady) {
+          try { await JM.authReady; } catch {}
         }
-        if (JM.isAdmin?.()) list.appendChild(renderMenuLink("Admin", "admin/index.html"));
-        list.appendChild(renderMenuLink("Logout", "#", { id: "logout-link" }));
-        list.appendChild(renderMenuSep());
-        list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));
-        list.appendChild(renderMenuLink("Über uns", "ueberuns.html"));
-        list.appendChild(renderMenuLink("Datenschutzerklärung", "datenschutz.html"));
-        list.appendChild(renderMenuLink("AGB", "agb.html"));
-        list.appendChild(renderMenuLink("Impressum", "impressum.html"));
-      } else {
-        list.appendChild(renderMenuLink("Anmelden", "login.html"));
-        list.appendChild(renderMenuLink("Registrieren", "register.html"));
-        list.appendChild(renderMenuSep());        
-        list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));
-        list.appendChild(renderMenuLink("Impressum", "impressum.html"));
-        list.appendChild(renderMenuLink("Über uns", "ueberuns.html"));
-        list.appendChild(renderMenuLink("AGB", "agb.html"));
-      }
-
-      JM.$$(".menu-link", list).forEach(a => a.addEventListener("click", () => closeMenu()));
-
-      JM.$("#logout-link")?.addEventListener("click", async (e) => {
-        e.preventDefault();
-        try { await JM.signOut?.(); } catch {}
-        window.location.href = "index.html";
+        const u = JM.getCurrentUser?.();
+        window.location.href = u ? "favorites.html" : "login.html";
       });
     }
 
-    JM.$("#account-btn")?.addEventListener("click", async () => {
-      if (JM.authReady) {
-        try { await JM.authReady; } catch {}
+    // ✅ Menü-Inhalt jedes Mal neu bauen (verhindert doppelte Links)
+    list.innerHTML = "";
+    list.appendChild(renderThemeSwitchItem());
+
+    list.appendChild(renderMenuLink("Startseite", "index.html"));
+    list.appendChild(renderMenuLink("Suche", "search.html"));
+    list.appendChild(renderMenuSep());
+
+    // Auth abwarten (nur für dynamische Links)
+    if (JM.authReady) {
+      try { await JM.authReady; } catch {}
+    }
+
+    const user = JM.getCurrentUser?.();
+
+    if (user) {
+      list.appendChild(renderMenuLink("Gespeicherte Jobs", "favorites.html"));
+      if (JM.isEntrepreneur?.()) {
+        list.appendChild(renderMenuLink("Meine Inserate", "my-posted-jobs.html"));
+        list.appendChild(renderMenuLink("Job einstellen", "post-job.html"));
       }
-      const u = JM.getCurrentUser?.();
-      window.location.href = u ? "favorites.html" : "login.html";
+      if (JM.isAdmin?.()) list.appendChild(renderMenuLink("Admin", "admin/index.html"));
+
+      list.appendChild(renderMenuLink("Logout", "#", { id: "logout-link" }));
+      list.appendChild(renderMenuSep());
+
+      list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));
+      list.appendChild(renderMenuLink("Über uns", "ueberuns.html"));
+      list.appendChild(renderMenuLink("Datenschutzerklärung", "datenschutz.html"));
+      list.appendChild(renderMenuLink("AGB", "agb.html"));
+      list.appendChild(renderMenuLink("Impressum", "impressum.html"));
+    } else {
+      list.appendChild(renderMenuLink("Anmelden", "login.html"));
+      list.appendChild(renderMenuLink("Registrieren", "register.html"));
+      list.appendChild(renderMenuSep());
+      list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));
+      list.appendChild(renderMenuLink("Über uns", "ueberuns.html"));
+      list.appendChild(renderMenuLink("AGB", "agb.html"));
+      list.appendChild(renderMenuLink("Impressum", "impressum.html"));
+    }
+
+    // Klick auf Link schließt Menü
+    JM.$$(".menu-link", list).forEach((a) =>
+      a.addEventListener("click", () => closeMenu())
+    );
+
+    // Logout handler (nur wenn vorhanden)
+    JM.$("#logout-link")?.addEventListener("click", async (e) => {
+      e.preventDefault();
+      try { await JM.signOut?.(); } catch {}
+      window.location.href = "index.html";
     });
   };
 })();
+
+// Auto-init
 document.addEventListener("DOMContentLoaded", () => {
   try { window.JM?.initMenu?.(); } catch {}
 });
