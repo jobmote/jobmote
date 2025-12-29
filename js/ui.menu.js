@@ -1,7 +1,5 @@
 // Side Menu + Header Buttons
 (function () {
-  const JM = window.JM;
-
   function renderMenuLink(text, href, opts = {}) {
     const li = document.createElement("li");
     const a = document.createElement("a");
@@ -36,14 +34,21 @@
     return li;
   }
 
-  JM.initMenu = async function initMenu() {
+  // initMenu wird IMMER definiert (auch wenn core.js mal minimal später kommt)
+  window.JM = window.JM || {};
+  window.JM.initMenu = async function initMenu() {
+    const JM = window.JM;
+
+    // core.js muss JM.$ und JM.$$ liefern
+    if (!JM || typeof JM.$ !== "function" || typeof JM.$$ !== "function") return;
+
     const menuToggle = JM.$("#menu-toggle");
     const sideMenu = JM.$("#side-menu");
     const overlay = JM.$("#menu-overlay");
     const menuClose = JM.$("#menu-close");
     const list = JM.$("#menu-list");
 
-    // Wenn Grund-DOM fehlt: abbrechen (kein globaler init-guard!)
+    // Wenn Grund-DOM fehlt -> abbrechen (aber KEIN globaler init-guard!)
     if (!menuToggle || !sideMenu || !overlay || !menuClose || !list) return;
 
     function openMenu() {
@@ -51,6 +56,7 @@
       overlay.classList.add("active");
       menuToggle.setAttribute("aria-expanded", "true");
     }
+
     function closeMenu() {
       sideMenu.classList.remove("active");
       overlay.classList.remove("active");
@@ -63,7 +69,8 @@
 
       menuToggle.addEventListener("click", () => {
         const isOpen = sideMenu.classList.contains("active");
-        if (isOpen) closeMenu(); else openMenu();
+        if (isOpen) closeMenu();
+        else openMenu();
       });
 
       menuClose.addEventListener("click", closeMenu);
@@ -99,11 +106,15 @@
 
     if (user) {
       list.appendChild(renderMenuLink("Gespeicherte Jobs", "favorites.html"));
+
       if (JM.isEntrepreneur?.()) {
         list.appendChild(renderMenuLink("Meine Inserate", "my-posted-jobs.html"));
         list.appendChild(renderMenuLink("Job einstellen", "post-job.html"));
       }
-      if (JM.isAdmin?.()) list.appendChild(renderMenuLink("Admin", "admin/index.html"));
+
+      if (JM.isAdmin?.()) {
+        list.appendChild(renderMenuLink("Admin", "admin/index.html"));
+      }
 
       list.appendChild(renderMenuLink("Logout", "#", { id: "logout-link" }));
       list.appendChild(renderMenuSep());
@@ -137,7 +148,12 @@
   };
 })();
 
-// Auto-init
+// Auto-init (retry-sicher)
 document.addEventListener("DOMContentLoaded", () => {
-  try { window.JM?.initMenu?.(); } catch {}
+  const tryInit = () => {
+    const JM = window.JM;
+    if (!JM || typeof JM.initMenu !== "function") return setTimeout(tryInit, 50);
+    try { JM.initMenu(); } catch (e) { console.error(e); }
+  };
+  tryInit();
 });
