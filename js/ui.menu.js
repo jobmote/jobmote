@@ -119,3 +119,6 @@
     });
   };
 })();
+document.addEventListener("DOMContentLoaded", () => {
+  try { window.JM?.initMenu?.(); } catch {}
+});
