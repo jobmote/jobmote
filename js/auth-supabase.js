@@ -8,6 +8,8 @@ function wireRegister(supabase) {
   console.log("[auth] wireRegister() start");
 
   const form = byId("register-form");
+  console.log("[auth] register form found:", form);
+
   const msg = byId("register-msg");
   const emailEl =
   byId("reg-email") ||
