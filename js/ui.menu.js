@@ -37,11 +37,52 @@
   }
 
   JM.initMenu = async function initMenu() {
-    if (window.__JM_MENU_INIT__) return;
-window.__JM_MENU_INIT__ = true;
+  const menuToggle = JM.$("#menu-toggle");
+  const sideMenu = JM.$("#side-menu");
+  const overlay = JM.$("#menu-overlay");
+  const menuClose = JM.$("#menu-close");
 
-const list = document.getElementById("menu-list");
-if (list) list.innerHTML = "";
+  // Wenn Grund-DOM fehlt -> einfach abbrechen (OHNE globalen init-guard!)
+  if (!menuToggle || !sideMenu || !overlay || !menuClose) return;
+
+  function openMenu() {
+    sideMenu.classList.add("active");
+    overlay.classList.add("active");
+    menuToggle.setAttribute("aria-expanded", "true");
+  }
+  function closeMenu() {
+    sideMenu.classList.remove("active");
+    overlay.classList.remove("active");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
+
+  // ✅ 1) Event-Binding nur einmal
+  if (!window.__JM_MENU_BOUND__) {
+    window.__JM_MENU_BOUND__ = true;
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = sideMenu.classList.contains("active");
+      if (isOpen) closeMenu(); else openMenu();
+    });
+    menuClose.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+
+    JM.$("#account-btn")?.addEventListener("click", async () => {
+      if (JM.authReady) {
+        try { await JM.authReady; } catch {}
+      }
+      const u = JM.getCurrentUser?.();
+      window.location.href = u ? "favorites.html" : "login.html";
+    });
+  }
+
+  // ✅ 2) Menü-Inhalt jedes Mal sauber neu bauen (oder optional: guard fürs rendern)
+  const list = JM.$("#menu-list");
+  if (!list) return;
+  list.innerHTML = "";
 
     const menuToggle = JM.$("#menu-toggle");
     const sideMenu = JM.$("#side-menu");
@@ -100,11 +141,11 @@ if (list) list.innerHTML = "";
       } else {
         list.appendChild(renderMenuLink("Anmelden", "login.html"));
         list.appendChild(renderMenuLink("Registrieren", "register.html"));
-        list.appendChild(renderMenuSep());        list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));
+        list.appendChild(renderMenuSep());        
+        list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));
         list.appendChild(renderMenuLink("Impressum", "impressum.html"));
         list.appendChild(renderMenuLink("Über uns", "ueberuns.html"));
         list.appendChild(renderMenuLink("AGB", "agb.html"));
-        list.appendChild(renderMenuLink("Impressum", "impressum.html"));
       }
 
       JM.$$(".menu-link", list).forEach(a => a.addEventListener("click", () => closeMenu()));
