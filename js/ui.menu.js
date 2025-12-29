@@ -64,30 +64,38 @@
     }
 
     // ✅ Events nur einmal binden
-    if (!window.__JM_MENU_BOUND__) {
-      window.__JM_MENU_BOUND__ = true;
+    // ✅ Events pro Element nur einmal binden (robust, auch bei neuem DOM)
+    // Menü-Events nur einmal
+const bindKey = "jmMenuBound";
+if (!sideMenu.dataset[bindKey]) {
+  sideMenu.dataset[bindKey] = "1";
 
-      menuToggle.addEventListener("click", () => {
-        const isOpen = sideMenu.classList.contains("active");
-        if (isOpen) closeMenu();
-        else openMenu();
-      });
+  menuToggle.addEventListener("click", () => {
+    const isOpen = sideMenu.classList.contains("active");
+    if (isOpen) closeMenu();
+    else openMenu();
+  });
 
-      menuClose.addEventListener("click", closeMenu);
-      overlay.addEventListener("click", closeMenu);
+  menuClose.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu);
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeMenu();
-      });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+}
 
-      JM.$("#account-btn")?.addEventListener("click", async () => {
-        if (JM.authReady) {
-          try { await JM.authReady; } catch {}
-        }
-        const u = JM.getCurrentUser?.();
-        window.location.href = u ? "favorites.html" : "login.html";
-      });
+// Account-Button separat, ebenfalls nur einmal
+const accountBtn = JM.$("#account-btn");
+if (accountBtn && !accountBtn.dataset.bound) {
+  accountBtn.dataset.bound = "1";
+  accountBtn.addEventListener("click", async () => {
+    if (JM.authReady) {
+      try { await JM.authReady; } catch {}
     }
+    const u = JM.getCurrentUser?.();
+    window.location.href = u ? "favorites.html" : "login.html";
+  });
+}
 
     // ✅ Menü-Inhalt jedes Mal neu bauen (verhindert doppelte Links)
     list.innerHTML = "";
@@ -152,8 +160,24 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tryInit = () => {
     const JM = window.JM;
-    if (!JM || typeof JM.initMenu !== "function") return setTimeout(tryInit, 50);
+
+    // Warten bis core.js da ist (JM.$ / JM.$$)
+    if (!JM || typeof JM.initMenu !== "function" || typeof JM.$ !== "function" || typeof JM.$$ !== "function") {
+      return setTimeout(tryInit, 50);
+    }
+
+    // Warten bis die Menu-DOM wirklich existiert
+    const ok =
+      JM.$("#menu-toggle") &&
+      JM.$("#side-menu") &&
+      JM.$("#menu-overlay") &&
+      JM.$("#menu-close") &&
+      JM.$("#menu-list");
+
+    if (!ok) return setTimeout(tryInit, 50);
+
     try { JM.initMenu(); } catch (e) { console.error(e); }
   };
+
   tryInit();
 });
