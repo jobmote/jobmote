@@ -93,7 +93,7 @@ if (accountBtn && !accountBtn.dataset.bound) {
       try { await JM.authReady; } catch {}
     }
     const u = JM.getCurrentUser?.();
-    window.location.href = u ? "favorites.html" : "login.html";
+    window.location.href = u ? "favorites.html" : "/login/";
   });
 }
 
@@ -133,7 +133,7 @@ if (accountBtn && !accountBtn.dataset.bound) {
       list.appendChild(renderMenuLink("AGB", "agb.html"));
       list.appendChild(renderMenuLink("Impressum", "impressum.html"));
     } else {
-      list.appendChild(renderMenuLink("Anmelden", "login.html"));
+      list.appendChild(renderMenuLink("Anmelden", "/login/"));
       list.appendChild(renderMenuLink("Registrieren", "register.html"));
       list.appendChild(renderMenuSep());
       list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));

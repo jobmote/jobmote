@@ -80,7 +80,7 @@
         if (wantsToRegister) {
           window.location.href = "register.html";
         } else {
-          window.location.href = "login.html";
+          window.location.href = "/login/";
         }
         return;
       }
