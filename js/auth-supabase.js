@@ -1,4 +1,7 @@
+console.log("🔥 auth-supabase.js LOADED");
 import { getSupabase } from "/js/supabase.js";
+console.log("🔥 auth-supabase.js AFTER IMPORT");
+
 
 function byId(id) {
   return document.getElementById(id);
