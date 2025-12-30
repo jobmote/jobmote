@@ -92,6 +92,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  wireRegister(supabase);
+  // Seiten-spezifisch verdrahten
+  if (byId("register-form")) wireRegister(supabase);
+  if (byId("login-form")) wireLogin?.(supabase); // falls wireLogin existiert
 });
 
