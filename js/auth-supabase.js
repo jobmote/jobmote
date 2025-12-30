@@ -142,8 +142,8 @@ function wireLogin(supabase) {
 /* =========================
    INIT
 ========================= */
-document.addEventListener("DOMContentLoaded", async () => {
-  console.log("[auth] DOMContentLoaded ✅");
+async function initAuth() {
+  console.log("[auth] initAuth() ✅");
 
   let supabase;
   try {
@@ -156,6 +156,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (byId("register-form")) wireRegister(supabase);
   if (byId("login-form")) wireLogin(supabase);
-});
+}
+
+// ✅ Läuft auch wenn DOMContentLoaded schon vorbei ist
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAuth);
+} else {
+  initAuth();
+}
 
 
