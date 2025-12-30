@@ -54,7 +54,7 @@ function wireRegister(supabase) {
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin + "/login.html",
+        emailRedirectTo: window.location.origin + "/login",
       },
     });
 
