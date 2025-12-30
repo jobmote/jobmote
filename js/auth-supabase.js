@@ -1,19 +1,20 @@
+// ==============================
+// auth-supabase.js
+// ==============================
+
 console.log("🔥 auth-supabase.js LOADED");
 
 import { getSupabase } from "/js/supabase.js";
 
 console.log("🔥 auth-supabase.js AFTER IMPORT");
 
-// --------------------------------------------------
-// Helpers
-// --------------------------------------------------
 function byId(id) {
   return document.getElementById(id);
 }
 
-// --------------------------------------------------
+// ==============================
 // REGISTER
-// --------------------------------------------------
+// ==============================
 function wireRegister(supabase) {
   console.log("[auth] wireRegister() start");
 
@@ -25,11 +26,19 @@ function wireRegister(supabase) {
 
   const msg = byId("register-msg");
 
-  const emailEl = form.querySelector("#reg-email") || form.querySelector('input[type="email"]');
-  const passEl = form.querySelector("#reg-password") || form.querySelector('input[type="password"]');
+  const emailEl =
+    form.querySelector("#reg-email") ||
+    form.querySelector("#register-email") ||
+    form.querySelector('input[type="email"]');
+
+  const passEl =
+    form.querySelector("#reg-password") ||
+    form.querySelector("#register-password") ||
+    form.querySelector('input[type="password"]');
 
   if (!emailEl || !passEl) {
     console.log("[auth] register elements missing", { emailEl, passEl });
+    if (msg) msg.textContent = "Formular-IDs fehlen (E-Mail/Passwort).";
     return;
   }
 
@@ -48,11 +57,11 @@ function wireRegister(supabase) {
     const password = passEl.value.trim();
 
     if (!email || password.length < 6) {
-      if (msg) msg.textContent = "Bitte gültige E-Mail + Passwort (mind. 6 Zeichen)";
+      if (msg) msg.textContent = "Bitte gültige E-Mail + Passwort (mind. 6 Zeichen).";
       return;
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -60,21 +69,24 @@ function wireRegister(supabase) {
       },
     });
 
+    console.log("[auth] signup response", { data, error });
+
     if (error) {
-      console.error(error);
-      if (msg) msg.textContent = error.message;
+      if (msg) msg.textContent = "Fehler: " + error.message;
       return;
     }
 
-    if (msg) msg.textContent = "✅ Account erstellt – bitte E-Mail bestätigen.";
+    if (msg)
+      msg.textContent =
+        "✅ Account angelegt. Bitte E-Mail bestätigen (Spam prüfen).";
   });
 
   console.log("[auth] wireRegister() listener attached ✅");
 }
 
-// --------------------------------------------------
+// ==============================
 // LOGIN
-// --------------------------------------------------
+// ==============================
 function wireLogin(supabase) {
   console.log("[auth] wireLogin() start");
 
@@ -86,11 +98,17 @@ function wireLogin(supabase) {
 
   const msg = byId("login-msg");
 
-  const emailEl = form.querySelector("#login-email") || form.querySelector('input[type="email"]');
-  const passEl = form.querySelector("#login-password") || form.querySelector('input[type="password"]');
+  const emailEl =
+    form.querySelector("#login-email") ||
+    form.querySelector('input[type="email"]');
+
+  const passEl =
+    form.querySelector("#login-password") ||
+    form.querySelector('input[type="password"]');
 
   if (!emailEl || !passEl) {
     console.log("[auth] login elements missing", { emailEl, passEl });
+    if (msg) msg.textContent = "Formular-IDs fehlen.";
     return;
   }
 
@@ -108,34 +126,40 @@ function wireLogin(supabase) {
     const email = emailEl.value.trim().toLowerCase();
     const password = passEl.value.trim();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
+    console.log("[auth] login response", { data, error });
+
     if (error) {
-      console.error(error);
-      if (msg) msg.textContent = error.message;
+      if (msg) msg.textContent = "Login fehlgeschlagen: " + error.message;
       return;
     }
 
-    console.log("[auth] login success ✅");
-    window.location.href = "/";
+    if (msg) msg.textContent = "✅ Login erfolgreich. Weiterleitung…";
+
+    // Zielseite nach Login
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 600);
   });
 
   console.log("[auth] wireLogin() listener attached ✅");
 }
 
-// --------------------------------------------------
-// INIT
-// --------------------------------------------------
+// ==============================
+// BOOTSTRAP
+// ==============================
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("[auth] DOMContentLoaded ✅");
+  console.log("[auth] start ✅");
 
   let supabase;
   try {
+    console.log("[auth] init getSupabase()…");
     supabase = await getSupabase();
-    console.log("[auth] supabase ready ✅");
+    console.log("[auth] supabase ready ✅", supabase);
   } catch (e) {
     console.error("[auth] Supabase init failed ❌", e);
     return;
