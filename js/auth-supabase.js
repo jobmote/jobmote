@@ -10,29 +10,36 @@ function wireRegister(supabase) {
   const form = byId("register-form");
   console.log("[auth] register form found:", form);
 
-  const msg = byId("register-msg");
-  const emailEl =
-  byId("reg-email") ||
-  byId("register-email") ||
-  byId("email") ||
-  document.querySelector('input[type="email"]');
-  const passEl =
-  byId("reg-password") ||
-  byId("register-password") ||
-  byId("password") ||
-  document.querySelector('input[type="password"]');
+ const form = byId("register-form");
+if (!form) {
+  console.log("[auth] register form NOT found");
+  return;
+}
 
-  console.log("[auth] elements", {
-    form: !!form,
-    msg: !!msg,
-    emailEl: !!emailEl,
-    passEl: !!passEl,
-  });
+const msg = byId("register-msg");
 
-  if (!form || !emailEl || !passEl) {
-    console.error("[auth] Register elements missing");
-    return;
-  }
+// 👉 Inputs NUR innerhalb des Register-Formulars suchen
+const emailEl =
+  form.querySelector("#reg-email") ||
+  form.querySelector("#register-email") ||
+  form.querySelector('input[type="email"]');
+
+const passEl =
+  form.querySelector("#reg-password") ||
+  form.querySelector("#register-password") ||
+  form.querySelector('input[type="password"]');
+
+if (!emailEl || !passEl) {
+  console.log("[auth] register elements missing", { emailEl, passEl });
+  if (msg) msg.textContent = "Formular-IDs fehlen (E-Mail/Passwort).";
+  return;
+}
+
+console.log("[auth] register elements OK", {
+  email: emailEl.id,
+  password: passEl.id
+});
+
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
