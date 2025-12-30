@@ -1,7 +1,8 @@
 console.log("🔥 auth-supabase.js LOADED");
-import { getSupabase } from "/js/supabase.js";
-console.log("🔥 auth-supabase.js AFTER IMPORT");
 
+import { getSupabase } from "/js/supabase.js";
+
+console.log("🔥 auth-supabase.js AFTER IMPORT");
 
 function byId(id) {
   return document.getElementById(id);
@@ -36,8 +37,8 @@ function wireRegister(supabase) {
   }
 
   console.log("[auth] register elements OK", {
-    email: emailEl.id,
-    password: passEl.id,
+    email: emailEl.id || "(no-id)",
+    password: passEl.id || "(no-id)",
   });
 
   form.addEventListener("submit", async (e) => {
@@ -52,7 +53,9 @@ function wireRegister(supabase) {
     console.log("[auth] signup payload", { email, pwLen: password.length });
 
     if (!email || password.length < 6) {
-      if (msg) msg.textContent = "Bitte gültige E-Mail + Passwort (mind. 6 Zeichen) eingeben.";
+      if (msg)
+        msg.textContent =
+          "Bitte gültige E-Mail + Passwort (mind. 6 Zeichen) eingeben.";
       return;
     }
 
@@ -60,6 +63,7 @@ function wireRegister(supabase) {
       email,
       password,
       options: {
+        // nach Email-Confirm geht's hierhin
         emailRedirectTo: window.location.origin + "/login",
       },
     });
@@ -71,14 +75,21 @@ function wireRegister(supabase) {
       return;
     }
 
-    if (msg) msg.textContent = "✅ Account angelegt. Bitte E-Mail bestätigen (Spam prüfen).";
+    if (msg)
+      msg.textContent = "✅ Account angelegt. Bitte E-Mail bestätigen (Spam prüfen).";
   });
 
   console.log("[auth] wireRegister() listener attached ✅");
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  console.log("[auth] DOMContentLoaded ✅");
+/**
+ * Optional: wireLogin kannst du später ergänzen.
+ * Wichtig: NICHT wireLogin?.(...) verwenden, wenn wireLogin nicht existiert!
+ */
+// function wireLogin(supabase) { ... }
+
+(async () => {
+  console.log("[auth] start ✅");
 
   let supabase;
   try {
@@ -94,6 +105,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Seiten-spezifisch verdrahten
   if (byId("register-form")) wireRegister(supabase);
-  if (byId("login-form")) wireLogin?.(supabase); // falls wireLogin existiert
-});
+
+  // Nur aktivieren, wenn du wireLogin wirklich definierst:
+  // if (typeof wireLogin === "function" && byId("login-form")) wireLogin(supabase);
+})();
+
 
