@@ -23,7 +23,7 @@
     const session = sessionData?.session;
 
     if (!session) {
-      window.location.href = "/login.html";
+      window.location.href = "/lognin/";
     }
 
     const user = session.user;
@@ -39,7 +39,7 @@
       logoutBtn.style.display = "inline-block";
       logoutBtn.onclick = async () => {
         await supabase.auth.signOut();
-        window.location.href = "/login.html";
+        window.location.href = "/login/";
       };
 
       document.getElementById("resend").onclick = async () => {
@@ -53,7 +53,7 @@
     logoutBtn.style.display = "inline-block";
     logoutBtn.onclick = async () => {
       await supabase.auth.signOut();
-      window.location.href = "/login.html";
+      window.location.href = "/login/";
     };
 
     state.textContent = "Lade Jobs…";
