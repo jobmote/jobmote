@@ -8,7 +8,7 @@
     }
     const u = JM.getCurrentUser?.();
     if (!u) {
-      window.location.href = "login.html";
+      window.location.href = "/login/";
       return null;
     }
     if (!(JM.isEntrepreneur?.() || JM.isAdmin?.())) {
