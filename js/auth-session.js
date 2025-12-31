@@ -35,16 +35,13 @@ async function buildCurrentUser(supabase) {
   const session = data?.session || null;
   const user = session?.user || null;
 
-  const confirmed = user?.email_confirmed_at || user?.confirmed_at; // confirmed_at als Fallback
-
-if (user && !confirmed) {
-  // Nicht heimlich ausloggen, sonst wirkt Login kaputt
-  // -> Du kannst hier später zur Login-Seite umleiten oder Hinweis anzeigen
-  return null;
-}
-
-
   if (!user) return null;
+
+  const confirmed = user.email_confirmed_at || user.confirmed_at;
+  if (!confirmed) {
+    // nicht signOut!
+    return null;
+  }
 
   const profile = await loadProfile(supabase, user);
   if (isBanned(profile)) {
@@ -57,7 +54,7 @@ if (user && !confirmed) {
     email: user.email,
     role: String(profile?.role || "user").toLowerCase(),
     profile,
-    confirmedAt: user.email_confirmed_at || null,
+    confirmedAt: user.email_confirmed_at || user.confirmed_at || null,
     loadedAt: nowIso(),
   };
 }
