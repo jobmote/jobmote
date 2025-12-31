@@ -157,6 +157,7 @@ if (!list.dataset.menuClickBound) {
 
     // Logout
     if (a.id === "logout-link") {
+      console.log("LOGOUT CLICKED"); // <- nur zum Test
       e.preventDefault();
       try {
         await window.JM?.signOut?.();
