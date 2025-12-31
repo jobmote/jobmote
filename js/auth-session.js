@@ -58,10 +58,9 @@ async function buildCurrentUser(supabase) {
     loadedAt: nowIso(),
   };
 }
-
 async function init() {
   const supabase = await getSupabase();
-  JM.supabase = supabase; // optional convenience
+  JM.supabase = supabase;
 
   JM.currentUser = await buildCurrentUser(supabase);
 
@@ -71,37 +70,34 @@ async function init() {
 
   JM.signOut = async function () {
     try {
-      const { error } = await supabase.auth.signOut(); // ✅ nutzt denselben Client
+      const { error } = await supabase.auth.signOut();
       if (error) console.error("Supabase signOut error:", error);
-
       JM.currentUser = null;
       localStorage.removeItem("jm-user");
+
+      if (typeof JM.initMenu === "function") JM.initMenu();
     } catch (err) {
       console.error("signOut crashed:", err);
     }
   };
 
-  // ✅ Auth-State live aktualisieren
- supabase.auth.onAuthStateChange(async (event) => {
-  if (event === "SIGNED_OUT") {
-    JM.currentUser = null;
-  }
-  if (event === "SIGNED_IN") {
-    JM.currentUser = await buildCurrentUser(supabase);
+  supabase.auth.onAuthStateChange(async (event) => {
+    if (event === "SIGNED_OUT") {
+      JM.currentUser = null;
+    } else if (event === "SIGNED_IN") {
+      JM.currentUser = await buildCurrentUser(supabase);
+    }
 
-if (typeof JM.initMenu === "function") {
-  JM.initMenu();
-}
+    if (typeof JM.initMenu === "function") {
+      JM.initMenu();
+    }
+  });
 
-
-  // ✅ Menü/UI aktualisieren, wenn vorhanden
-  try { await JM.authReady; } catch {}
+  // optional: direkt nach Init auch Menü zeichnen
   if (typeof JM.initMenu === "function") {
-    JM.initMenu(); // baut Menü neu mit aktuellem User
+    JM.initMenu();
   }
-});
-
 }
-
 JM.authReady = init();
+
 
