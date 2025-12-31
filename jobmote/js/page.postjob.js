@@ -52,7 +52,7 @@
        PREVIEW JOB (gekürzt)
        ====================== */
     function draftJob() {
-      const employer = (JM.$("#pj-employer")?.value || "").trim() || "Beispiel GmbH";
+      const company = JM.$("#pj-employer")?.value || "").trim() || "Beispiel GmbH";
       const title = (JM.$("#pj-title")?.value || "").trim() || "Jobtitel (Vorschau)";
       const pay = Number((JM.$("#pj-pay")?.value || "").trim() || 16);
       const hoursPerWeek = Number((JM.$("#pj-hours")?.value || "").trim() || 8);

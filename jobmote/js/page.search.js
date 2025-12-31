@@ -49,7 +49,7 @@
       const jobs = JM.loadAllJobs();
 
       for (const job of jobs) {
-        const hay = `${job.employer} ${job.title} ${job.description} ${job.category} ${job.language} ${job.region} ${job.pay} ${job.hoursPerWeek}`.toLowerCase();
+        const hay = `${job.company} ${job.title} ${job.description} ${job.category} ${job.language} ${job.region} ${job.pay} ${job.hoursPerWeek}`.toLowerCase();
         if (!hay.includes(q)) continue;
 
         hits.push({

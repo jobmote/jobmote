@@ -33,7 +33,7 @@
 
       <div class="card-content">
         <div class="pill">${JM.badgeFor(job)}</div>
-        <p class="card-employer">${job.employer || "–"}</p>
+        <p class="card-employer">${job.company || "-"}</p>
         <h3 class="card-title">${job.title || "–"}</h3>
         <p class="card-description">${shortDescription}</p>
 

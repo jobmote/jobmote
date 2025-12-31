@@ -88,7 +88,7 @@
 
     function applySearchTerm(job, term) {
       if (!term) return true;
-      const hay = `${job.employer} ${job.title} ${job.description} ${job.category} ${job.language} ${job.region}`.toLowerCase();
+      const hay = `${job.company} ${job.title} ${job.description} ${job.category} ${job.language} ${job.region}`.toLowerCase();
       return hay.includes(term.toLowerCase());
     }
 

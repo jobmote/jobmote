@@ -53,7 +53,7 @@
 
     JM.$("#job-modal-badge").textContent = JM.badgeFor(job);
     JM.$("#job-modal-title").textContent = job.title || "–";
-    JM.$("#job-modal-employer").textContent = job.employer || "–";
+    JM.$("#job-modal-employer").textContent = job.company || "–";
     JM.$("#job-modal-pay").textContent = JM.formatEuro(job.pay);
     JM.$("#job-modal-hours").textContent = `${job.hoursPerWeek ?? "–"} Std/Woche`;
     JM.$("#job-modal-lang").textContent = JM.langLabel(job.language);

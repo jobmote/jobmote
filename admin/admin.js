@@ -38,7 +38,7 @@
   async function fetchJobs() {
     const { data, error } = await JM.supabase
       .from("jobs")
-      .select("id,employer,title,created_at,owner_id")
+      .select("id, company, title, created_at, owner_id")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return data || [];
@@ -117,7 +117,7 @@
     const rows = jobs.map(j => `
       <tr>
         <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);"><code>${esc(j.id)}</code></td>
-        <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">${esc(j.employer || "–")}</td>
+        <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">${esc(j.company || "–")}</td>
         <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">${esc(j.title || "–")}</td>
         <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">${fmtDate(j.created_at)}</td>
         <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);"><code>${esc(j.owner_id || "–")}</code></td>
