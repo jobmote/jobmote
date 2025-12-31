@@ -37,7 +37,7 @@
     },
     {
       id: "job-3",
-      employer: "DataClean GmbH",
+      company: "DataClean GmbH",
       title: "Datenpflege / Excel (Remote)",
       description: "Daten aus PDFs/Listen in Tabellen übertragen, Dubletten prüfen, einfache Qualitätssicherung.",
       pay: 12.0,
