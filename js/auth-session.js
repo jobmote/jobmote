@@ -1,7 +1,4 @@
 // jobmote.de – Auth Session (Supabase)
-// - No local demo users / sessions
-// - Provides JM.getCurrentUser(), JM.isAdmin(), JM.isEntrepreneur(), JM.signOut()
-// - Exposes JM.authReady (Promise) so non-module scripts can await if needed
 
 import { getSupabase } from "/js/supabase.js";
 
@@ -38,7 +35,6 @@ async function buildCurrentUser(supabase) {
   const session = data?.session || null;
   const user = session?.user || null;
 
-  // If email isn't confirmed, treat as logged out.
   if (user && !user.email_confirmed_at) {
     await supabase.auth.signOut();
     return null;
@@ -72,19 +68,28 @@ async function init() {
   JM.isAdmin = () => (JM.currentUser?.role || "") === "admin";
   JM.isEntrepreneur = () => (JM.currentUser?.role || "") === "entrepreneur";
 
-  JM.signOut = async () => {
-    await supabase.auth.signOut();
-    JM.currentUser = null;
+  JM.signOut = async function () {
+    try {
+      const { error } = await supabase.auth.signOut(); // ✅ nutzt denselben Client
+      if (error) console.error("Supabase signOut error:", error);
+
+      JM.currentUser = null;
+      localStorage.removeItem("jm-user");
+    } catch (err) {
+      console.error("signOut crashed:", err);
+    }
   };
 
-  // keep in sync
-  supabase.auth.onAuthStateChange(async () => {
-    JM.currentUser = await buildCurrentUser(supabase);
-    // refresh menu if present
-    if (typeof JM.initMenu === "function") {
-      try { JM.initMenu(); } catch {}
+  // ✅ Auth-State live aktualisieren
+  supabase.auth.onAuthStateChange(async (event) => {
+    if (event === "SIGNED_OUT") {
+      JM.currentUser = null;
+    }
+    if (event === "SIGNED_IN") {
+      JM.currentUser = await buildCurrentUser(supabase);
     }
   });
 }
 
 JM.authReady = init();
+
