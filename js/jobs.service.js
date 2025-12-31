@@ -13,7 +13,7 @@
   function mapRowToJob(row) {
     return {
       id: row.id,
-      employer: row.employer,
+      company: row.company,
       title: row.title,
       description: row.description,
       pay: row.pay,
@@ -38,7 +38,7 @@
 
     const { data, error } = await supabase
       .from("jobs")
-      .select("id, employer, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
+      .select("id, company, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
