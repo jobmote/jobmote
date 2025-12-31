@@ -142,17 +142,31 @@ if (accountBtn && !accountBtn.dataset.bound) {
       list.appendChild(renderMenuLink("Impressum", "impressum.html"));
     }
 
-    // Klick auf Link schließt Menü
-    JM.$$(".menu-link", list).forEach((a) =>
-      a.addEventListener("click", () => closeMenu())
-    );
+    // Link-Klicks (schließen + Logout) – robust per Delegation, nur einmal binden
+if (!list.dataset.menuClickBound) {
+  list.dataset.menuClickBound = "1";
 
-    // Logout handler (nur wenn vorhanden)
-    JM.$("#logout-link")?.addEventListener("click", async (e) => {
+  list.addEventListener("click", async (e) => {
+    const a = e.target.closest("a");
+    if (!a) return;
+
+    // Menü immer schließen, wenn ein Menü-Link geklickt wurde
+    if (a.classList.contains("menu-link")) {
+      closeMenu();
+    }
+
+    // Logout
+    if (a.id === "logout-link") {
       e.preventDefault();
-      try { await JM.signOut?.(); } catch {}
-      window.location.href = "index.html";
-    });
+      try {
+        await window.JM?.signOut?.();
+      } catch (err) {
+        console.error("Logout failed:", err);
+      }
+      window.location.assign("index.html");
+    }
+  });
+}
   };
 })();
 
