@@ -82,14 +82,25 @@ async function init() {
   };
 
   // ✅ Auth-State live aktualisieren
-  supabase.auth.onAuthStateChange(async (event) => {
-    if (event === "SIGNED_OUT") {
-      JM.currentUser = null;
-    }
-    if (event === "SIGNED_IN") {
-      JM.currentUser = await buildCurrentUser(supabase);
-    }
-  });
+ supabase.auth.onAuthStateChange(async (event) => {
+  if (event === "SIGNED_OUT") {
+    JM.currentUser = null;
+  }
+  if (event === "SIGNED_IN") {
+    JM.currentUser = await buildCurrentUser(supabase);
+
+if (typeof JM.initMenu === "function") {
+  JM.initMenu();
+}
+
+
+  // ✅ Menü/UI aktualisieren, wenn vorhanden
+  try { await JM.authReady; } catch {}
+  if (typeof JM.initMenu === "function") {
+    JM.initMenu(); // baut Menü neu mit aktuellem User
+  }
+});
+
 }
 
 JM.authReady = init();
