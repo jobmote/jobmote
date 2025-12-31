@@ -78,7 +78,7 @@
         );
 
         if (wantsToRegister) {
-          window.location.href = "register.html";
+          window.location.href = "/register/";
         } else {
           window.location.href = "/login/";
         }
