@@ -134,7 +134,7 @@ if (accountBtn && !accountBtn.dataset.bound) {
       list.appendChild(renderMenuLink("Impressum", "impressum.html"));
     } else {
       list.appendChild(renderMenuLink("Anmelden", "/login/"));
-      list.appendChild(renderMenuLink("Registrieren", "register.html"));
+      list.appendChild(renderMenuLink("Registrieren", "/register/"));
       list.appendChild(renderMenuSep());
       list.appendChild(renderMenuLink("Hilfe / FAQ", "faq.html"));
       list.appendChild(renderMenuLink("Über uns", "ueberuns.html"));
