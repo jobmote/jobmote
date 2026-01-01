@@ -100,7 +100,7 @@ if (accountBtn && !accountBtn.dataset.bound) {
     // ✅ Menü-Inhalt jedes Mal neu bauen (verhindert doppelte Links)
     list.innerHTML = "";
     list.appendChild(renderThemeSwitchItem());
-
+JM.initTheme?.();
     list.appendChild(renderMenuLink("Startseite", "index.html"));
     list.appendChild(renderMenuLink("Suche", "search.html"));
     list.appendChild(renderMenuSep());
