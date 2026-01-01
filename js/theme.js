@@ -1,21 +1,34 @@
 // Theme (Hell/Dunkel)
 (function () {
-  const JM = window.JM;
-  JM.initTheme = function initTheme() {
+  window.JM = window.JM || {};
+
+  window.JM.initTheme = function initTheme() {
+    const JM = window.JM;
     const body = document.body;
-    const themeSwitch = JM.$("#theme-switch");
 
-    const saved = localStorage.getItem(JM.KEYS.THEME);
+    const key = (JM.KEYS && JM.KEYS.THEME) ? JM.KEYS.THEME : "jm_theme";
+    const saved = localStorage.getItem(key);
     const isLight = saved === "light";
-    if (isLight) body.classList.add("light-mode");
 
-    if (themeSwitch) {
-      themeSwitch.checked = isLight;
-      themeSwitch.addEventListener("change", () => {
-        const makeLight = themeSwitch.checked;
-        body.classList.toggle("light-mode", makeLight);
-        localStorage.setItem(JM.KEYS.THEME, makeLight ? "light" : "dark");
-      });
-    }
+    // Klasse setzen
+    body.classList.toggle("light-mode", isLight);
+
+    // Switch finden (nicht zwingend über JM.$, weil JM.$ evtl. noch nicht ready ist)
+    const themeSwitch = document.querySelector("#theme-switch");
+    if (!themeSwitch) return;
+
+    // Switch-Status setzen
+    themeSwitch.checked = isLight;
+
+    // Listener nur einmal pro neuem Switch
+    if (themeSwitch.dataset.bound) return;
+    themeSwitch.dataset.bound = "1";
+
+    themeSwitch.addEventListener("change", () => {
+      const makeLight = themeSwitch.checked;
+      body.classList.toggle("light-mode", makeLight);
+      localStorage.setItem(key, makeLight ? "light" : "dark");
+    });
   };
 })();
+
