@@ -20,7 +20,7 @@
       try { await JM.authReady; } catch {}
     }
     if (!JM.isAdmin?.()) {
-      window.location.replace("../index.html");
+      window.location.replace("/index.html");
       return false;
     }
     return true;
