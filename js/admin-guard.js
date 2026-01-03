@@ -1,55 +1,42 @@
 import { getSupabase } from "/js/supabase.js";
 const supabase = await getSupabase();
 
-function redirectOut() {
-  window.location.replace("/index.html");
+function redirectOut(reason = "unknown") {
+  console.error("ADMIN-GUARD redirect:", reason, new Error().stack);
+  window.location.replace("/index.html?admin_redirect=" + encodeURIComponent(reason));
 }
 
 (async () => {
-  // 1️⃣ Session prüfen
+  // 1) Session prüfen
   const { data } = await supabase.auth.getSession();
   const user = data?.session?.user;
 
-  if (!user) {
-    redirectOut();
-    return;
-  }
+  if (!user) return redirectOut("no_user");
 
-  // 2️⃣ Email bestätigt?
+  // 2) Email bestätigt?
   const confirmed = user.email_confirmed_at || user.confirmed_at;
-  if (!confirmed) {
-    redirectOut();
-    return;
-  }
+  if (!confirmed) return redirectOut("not_confirmed");
 
-  // 3️⃣ Profil laden (RLS-sicher)
+  // 3) Profil laden
   const { data: profile, error } = await supabase
     .from("profiles")
     .select("role, banned_until, banned_permanent")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (error || !profile) {
-    console.error("Admin-Guard: profile load failed", error);
-    redirectOut();
-    return;
-  }
+  if (error) return redirectOut("profile_error:" + (error.code || "err"));
+  if (!profile) return redirectOut("no_profile_row");
 
-  // 4️⃣ Bann prüfen
+  // 4) Bann prüfen
   const isBanned =
     profile.banned_permanent === true ||
     (profile.banned_until && Date.parse(profile.banned_until) > Date.now());
 
-  if (isBanned) {
-    redirectOut();
-    return;
-  }
+  if (isBanned) return redirectOut("banned");
 
-  // 5️⃣ Admin-Rolle prüfen
-  if ((profile.role || "").toLowerCase() !== "admin") {
-    redirectOut();
-    return;
-  }
+  // 5) Admin prüfen
+  const role = (profile.role || "").toLowerCase();
+  if (role !== "admin") return redirectOut("not_admin:" + role);
 
-  // ✅ Wenn wir hier sind → Admin darf bleiben
+  console.log("ADMIN-GUARD ok");
 })();
