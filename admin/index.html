@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <script>
+  (function () {
+    const origReplace = window.location.replace.bind(window.location);
+    const origAssign = window.location.assign.bind(window.location);
+
+    window.location.replace = function (url) {
+      console.trace("REDIRECT via location.replace ->", url);
+      return origReplace(url);
+    };
+
+    window.location.assign = function (url) {
+      console.trace("REDIRECT via location.assign ->", url);
+      return origAssign(url);
+    };
+
+    window.addEventListener("beforeunload", () => {
+      console.log("beforeunload (navigation) triggered");
+    });
+
+    console.log("Redirect tracer active on", location.href);
+  })();
+</script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/jpeg" href="../assets/favicon.jpg">
@@ -54,6 +77,6 @@
   <script defer src="../js/jobs.data.js"></script>
   <script defer src="../js/jobs.service.js"></script>
   <script type="module" src="../js/auth-session.js"></script>
-<script defer src="admin.js"></script>>
+<script defer src="admin.js"></script>
 </body>
 </html>
