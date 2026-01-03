@@ -4,33 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meine Inserate – jobmote.de</title>
-  <link rel="icon" type="image/jpeg" href="assets/favicon.png">
-  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- ✅ ABSOLUTE PATHS -->
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/css/style.css" />
 
   <!-- Company-Guard: nur eingeloggte User mit role=company -->
   <script type="module">
-    import { supabase } from "./js/supabase.js";
+    import { supabase } from "/js/supabase.js";
 
-    const { data } = await supabase.auth.getSession();
+    const { data, error } = await supabase.auth.getSession();
+    if (error) console.error("getSession error:", error);
+
     if (!data?.session) {
       location.replace("/login/");
+      throw new Error("No session");
     }
 
     const userId = data.session.user.id;
 
-    const { data: profile, error } = await supabase
+    const { data: profile, error: pErr } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", userId)
       .single();
 
-    if (error) {
-      console.error("Company guard: profile load error", error);
-      location.replace("/");
+    if (pErr) {
+      console.error("Company guard: profile load error", pErr);
+      location.replace("/index.html");
+      throw pErr;
     }
 
     if ((profile?.role || "").toLowerCase() !== "company") {
-      location.replace("/"); // kein Zugriff
+      location.replace("/index.html"); // kein Zugriff
+      throw new Error("Not company");
     }
   </script>
 </head>
@@ -38,14 +45,14 @@
 <body data-page="my-posted-jobs">
   <header class="site-header">
     <div class="header-left">
-      <a class="brand-link" href="index.html" aria-label="Startseite">
-        <img src="assets/favicon.png" alt="jobmote.de" class="brand-icon" />
+      <a class="brand-link" href="/index.html" aria-label="Startseite">
+        <img src="/assets/favicon.png" alt="jobmote.de" class="brand-icon" />
         jobmote.de
       </a>
     </div>
 
     <div class="header-center">
-      <form id="site-search-form" class="search-form" action="search.html" method="GET">
+      <form id="site-search-form" class="search-form" action="/search.html" method="GET">
         <input id="site-search-input" class="search-bar" name="q" type="text" placeholder="Suche Jobs, Firmen, Keywords… 🔎" autocomplete="off" />
       </form>
     </div>
@@ -84,7 +91,7 @@
           <span class="muted">Inserate</span>
         </div>
         <div class="results-actions">
-          <a class="btn btn-ghost" href="post-job.html">Neuen Job erstellen</a>
+          <a class="btn btn-ghost" href="/post-job.html">Neuen Job erstellen</a>
         </div>
       </div>
 
@@ -93,7 +100,7 @@
       <div id="myj-empty" class="empty" hidden>
         <h3>Noch keine Inserate</h3>
         <p class="muted">Erstelle deinen ersten Job über „Job einstellen“.</p>
-        <a class="btn" href="post-job.html">Job einstellen</a>
+        <a class="btn" href="/post-job.html">Job einstellen</a>
       </div>
     </section>
   </main>
@@ -126,24 +133,28 @@
     </div>
   </div>
 
-  <script defer src="js/core.js"></script>
-  <script defer src="js/theme.js"></script>
-  <script type="module" src="js/auth-session.js"></script>
-  <script defer src="js/jobs.data.js"></script>
-  <script defer src="js/jobs.service.js"></script>
-  <script defer src="js/favorites.v2.js"></script>
-  <script defer src="js/ui.menu.js"></script>
-  <script defer src="js/render.js"></script>
-  <script defer src="js/ui.modal.js"></script>
-  <script defer src="js/page.home.js"></script>
-  <script defer src="js/page.favorites.js"></script>
-  <script defer src="js/page.search.js"></script>
-  <script defer src="js/page.postjob.js"></script>
+  <!-- ✅ ABSOLUTE PATHS -->
+  <script defer src="/js/core.js"></script>
+  <script defer src="/js/theme.js"></script>
+
+  <!-- auth-session ist module -->
+  <script type="module" src="/js/auth-session.js"></script>
+
+  <script defer src="/js/jobs.data.js"></script>
+  <script defer src="/js/jobs.service.js"></script>
+  <script defer src="/js/favorites.v2.js"></script>
+  <script defer src="/js/ui.menu.js"></script>
+  <script defer src="/js/render.js"></script>
+  <script defer src="/js/ui.modal.js"></script>
+  <script defer src="/js/page.home.js"></script>
+  <script defer src="/js/page.favorites.js"></script>
+  <script defer src="/js/page.search.js"></script>
+  <script defer src="/js/page.postjob.js"></script>
 
   <!-- optional: cache buster -->
-  <script defer src="js/page.my-posted-jobs.js?v=1"></script>
+  <script defer src="/js/page.my-posted-jobs.js?v=2"></script>
 
-  <script defer src="js/app.js"></script>
+  <script defer src="/js/app.js"></script>
 </body>
 </html>
 
