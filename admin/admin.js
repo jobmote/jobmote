@@ -1,3 +1,19 @@
+import { supabase } from "./supabaseClient.js";
+
+// erzwinge: JM benutzt exakt denselben Client wie admin.js
+window.JM = window.JM || {};
+window.JM.supabase = supabase;
+
+console.log("ADMIN MODULE LOADED");
+
+const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
+console.log("SESSION:", sessionData, sessionErr);
+
+if (!sessionData?.session) {
+  alert("Keine Session gefunden. Du bist für Supabase gerade ANON.");
+  throw new Error("No session");
+}
+
 // Admin – Users & Jobs (Supabase)
 (function () {
   function $(id) { return document.getElementById(id); }
@@ -36,7 +52,7 @@
   return true;
 }
   async function fetchProfiles() {
-    const { data, error } = await window.JM.supabase
+    const { data, error } = await supabase
       .from("profiles")
       .select("id,email,role,banned_until,banned_permanent,created_at")
       .order("created_at", { ascending: false });
@@ -45,7 +61,7 @@
   }
 
   async function fetchJobs() {
-    const { data, error } = await window.JM.supabase
+    const { data, error } = await supabase
       .from("jobs")
       .select("id, company, title, created_at, owner_id")
       .order("created_at", { ascending: false });
@@ -87,7 +103,7 @@
           <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">
             <select data-role-id="${esc(u.id)}" class="input" style="min-width:150px;">
               <option value="user" ${role === "user" ? "selected" : ""}>user</option>
-              <option value="entrepreneur" ${role === "entrepreneur" ? "selected" : ""}>entrepreneur</option>
+              <option value="company" ${role === "company" ? "selected" : ""}>company</option>
               <option value="admin" ${role === "admin" ? "selected" : ""}>admin</option>
             </select>
           </td>
