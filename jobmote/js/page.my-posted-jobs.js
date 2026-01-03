@@ -28,7 +28,7 @@
         <span class="muted small">Erstellt: ${JM.formatDate(job.createdAt)}</span>
       </div>
       <div class="results-actions">
-        <a class="btn btn-ghost" href="post-job.html?edit=${encodeURIComponent(job.id)}" style="color: green; border: 1px solid green;">Bearbeiten</a>
+        <a class="btn btn-ghost" href="/post-job/?edit=${encodeURIComponent(job.id)}" style="color: green; border: 1px solid green;">Bearbeiten</a>
         <button class="btn btn-ghost" data-del="1" type="button" style="color: red; border: 1px solid red;">Löschen</button>
       </div>
     `;
