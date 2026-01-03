@@ -115,10 +115,11 @@ JM.initTheme?.();
     if (user) {
       list.appendChild(renderMenuLink("Gespeicherte Jobs", "/favorites.html"));
 
-      if (JM.isEntrepreneur?.()) {
-        list.appendChild(renderMenuLink("Meine Inserate", "/my-posted-jobs.html"));
-        list.appendChild(renderMenuLink("Job einstellen", "/post-job.html"));
-      }
+      if (JM.isCompany?.()) {
+  list.appendChild(renderMenuLink("Meine Inserate", "/my-posted-jobs.html"));
+  list.appendChild(renderMenuLink("Job einstellen", "/post-job.html"));
+}
+
 
       if (JM.isAdmin?.()) {
         list.appendChild(renderMenuLink("Admin", "/admin/index.html"));

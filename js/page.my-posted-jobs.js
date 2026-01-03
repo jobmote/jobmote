@@ -1,8 +1,8 @@
-// My Posted Jobs Page (Entrepreneur/Admin): eigene Inserate bearbeiten/löschen
+// My Posted Jobs Page (Company/Admin): eigene Inserate bearbeiten/löschen
 (function () {
   const JM = window.JM;
 
-  async function requireEntrepreneur() {
+  async function requireCompany() {
     if (JM.authReady) {
       try { await JM.authReady; } catch {}
     }
@@ -11,7 +11,7 @@
       window.location.href = "/login/";
       return null;
     }
-    if (!(JM.isEntrepreneur?.() || JM.isAdmin?.())) {
+    if (!(JM.isCompany?.() || JM.isAdmin?.())) {
       window.location.href = "favorites.html";
       return null;
     }
@@ -77,7 +77,7 @@
   }
 
   JM.initMyPostedJobs = async function initMyPostedJobs() {
-    const u = await requireEntrepreneur();
+    const u = await requireCompany();
     if (!u) return;
     await JM.refreshRemoteJobs?.().catch(() => {});
     render();

@@ -23,8 +23,8 @@
       try { await JM.authReady; } catch {}
     }
 
-    // Only entrepreneur/admin can post
-    if (!(JM.isEntrepreneur?.() || JM.isAdmin?.())) {
+    // Only company/admin can post
+    if (!(JM.isCompany?.() || JM.isAdmin?.())) {
       if (guard) guard.hidden = false;
       if (form) form.style.display = "none";
       return;
