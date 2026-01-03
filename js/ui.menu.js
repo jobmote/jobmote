@@ -93,7 +93,7 @@ if (accountBtn && !accountBtn.dataset.bound) {
       try { await JM.authReady; } catch {}
     }
     const u = JM.getCurrentUser?.();
-    window.location.href = u ? "favorites.html" : "/login/";
+    window.location.href = u ? "/favorites.html" : "/login/";
   });
 }
 
@@ -101,8 +101,8 @@ if (accountBtn && !accountBtn.dataset.bound) {
     list.innerHTML = "";
     list.appendChild(renderThemeSwitchItem());
 JM.initTheme?.();
-    list.appendChild(renderMenuLink("Startseite", "index.html"));
-    list.appendChild(renderMenuLink("Suche", "search.html"));
+    list.appendChild(renderMenuLink("Startseite", "/index.html"));
+    list.appendChild(renderMenuLink("Suche", "/search.html"));
     list.appendChild(renderMenuSep());
 
     // Auth abwarten (nur für dynamische Links)
@@ -113,15 +113,15 @@ JM.initTheme?.();
     const user = JM.getCurrentUser?.();
 
     if (user) {
-      list.appendChild(renderMenuLink("Gespeicherte Jobs", "favorites.html"));
+      list.appendChild(renderMenuLink("Gespeicherte Jobs", "/favorites.html"));
 
       if (JM.isEntrepreneur?.()) {
-        list.appendChild(renderMenuLink("Meine Inserate", "my-posted-jobs.html"));
-        list.appendChild(renderMenuLink("Job einstellen", "post-job.html"));
+        list.appendChild(renderMenuLink("Meine Inserate", "/my-posted-jobs.html"));
+        list.appendChild(renderMenuLink("Job einstellen", "/post-job.html"));
       }
 
       if (JM.isAdmin?.()) {
-        list.appendChild(renderMenuLink("Admin", "admin/index.html"));
+        list.appendChild(renderMenuLink("Admin", "/admin/index.html"));
       }
 
       list.appendChild(renderMenuLink("Logout", "#", { id: "logout-link" }));
@@ -164,7 +164,7 @@ if (!list.dataset.menuClickBound) {
       } catch (err) {
         console.error("Logout failed:", err);
       }
-      window.location.assign("index.html");
+      window.location.assign("/index.html");
     }
   });
 }
