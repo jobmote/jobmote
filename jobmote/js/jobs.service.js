@@ -70,7 +70,7 @@
     return (JM.state.remoteJobs || []).filter(j => String(j.ownerId) === String(u.id));
   };
 
-  // CRUD for entrepreneurs/admins
+  // CRUD for companys/admins
   JM.createJob = async (job) => {
     const supabase = JM.supabase;
     const u = JM.getCurrentUser?.();
