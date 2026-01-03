@@ -115,7 +115,7 @@ if (accountBtn && !accountBtn.dataset.bound) {
     if (user) {
       list.appendChild(renderMenuLink("Gespeicherte Jobs", "favorites.html"));
 
-      if (JM.isEntrepreneur?.()) {
+      if (JM.isCompany?.()) {
         list.appendChild(renderMenuLink("Meine Inserate", "my-posted-jobs.html"));
         list.appendChild(renderMenuLink("Job einstellen", "post-job.html"));
       }
