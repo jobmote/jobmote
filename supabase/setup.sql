@@ -2,11 +2,11 @@
 --
 -- Goals
 -- 1) Auth via Supabase Auth (email + password) with email confirmation enabled.
--- 2) No self-service creation of admin/entrepreneur accounts.
+-- 2) No self-service creation of admin/company accounts.
 --    - New signups become role = 'user'.
---    - Admin/Entrepreneur roles are assigned by an admin via profiles table.
+--    - Admin/Company roles are assigned by an admin via profiles table.
 -- 3) Admin can moderate all jobs, assign roles, and ban users temporarily or permanently.
--- 4) Entrepreneur can create/update/delete own jobs.
+-- 4) Company can create/update/delete own jobs.
 
 -- ------------------------------
 -- Helpers
@@ -25,7 +25,7 @@ as $$
   );
 $$;
 
-create or replace function public.is_entrepreneur()
+create or replace function public.is_company()
 returns boolean
 language sql
 stable
@@ -33,7 +33,7 @@ as $$
   select exists (
     select 1 from public.profiles p
     where p.id = auth.uid()
-      and lower(p.role) in ('entrepreneur','admin')
+      and lower(p.role) in ('company','admin')
       and coalesce(p.banned_permanent,false) = false
       and (p.banned_until is null or p.banned_until <= now())
   );
@@ -121,33 +121,33 @@ on public.jobs
 for select
 using (true);
 
--- Entrepreneurs/Admins can insert jobs
-drop policy if exists "entrepreneur insert jobs" on public.jobs;
-create policy "entrepreneur insert jobs"
+-- Companys/Admins can insert jobs
+drop policy if exists "company insert jobs" on public.jobs;
+create policy "company insert jobs"
 on public.jobs
 for insert
 with check (
-  public.is_entrepreneur() and owner_id = auth.uid()
+  public.is_company() and owner_id = auth.uid()
 );
 
--- Entrepreneurs can update/delete own jobs; admins all jobs
-drop policy if exists "entrepreneur update own jobs" on public.jobs;
-create policy "entrepreneur update own jobs"
+-- Companys can update/delete own jobs; admins all jobs
+drop policy if exists "company update own jobs" on public.jobs;
+create policy "company update own jobs"
 on public.jobs
 for update
 using (
-  public.is_admin() or (public.is_entrepreneur() and owner_id = auth.uid())
+  public.is_admin() or (public.is_company() and owner_id = auth.uid())
 )
 with check (
-  public.is_admin() or (public.is_entrepreneur() and owner_id = auth.uid())
+  public.is_admin() or (public.is_company() and owner_id = auth.uid())
 );
 
-drop policy if exists "entrepreneur delete own jobs" on public.jobs;
-create policy "entrepreneur delete own jobs"
+drop policy if exists "company delete own jobs" on public.jobs;
+create policy "company delete own jobs"
 on public.jobs
 for delete
 using (
-  public.is_admin() or (public.is_entrepreneur() and owner_id = auth.uid())
+  public.is_admin() or (public.is_company() and owner_id = auth.uid())
 );
 
 -- ------------------------------
