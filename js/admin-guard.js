@@ -1,31 +1,42 @@
 import { getSupabase } from "/js/supabase.js";
 const supabase = await getSupabase();
 
-async function redirectOut() {
-  window.location.replace("../index.html");
+function redirectOut(reason = "unknown") {
+  console.error("ADMIN-GUARD redirect:", reason, new Error().stack);
+  window.location.replace("/index.html?admin_redirect=" + encodeURIComponent(reason));
 }
 
-const { data } = await supabase.auth.getSession();
-const user = data?.session?.user;
-if (!user) await redirectOut();
+(async () => {
+  // 1) Session prüfen
+  const { data } = await supabase.auth.getSession();
+  const user = data?.session?.user;
 
-// Require confirmed email
-if (!user.email_confirmed_at) await redirectOut();
+  if (!user) return redirectOut("no_user");
 
-// Option 1: profile role in public.profiles (recommended)
-try {
+  // 2) Email bestätigt?
+  const confirmed = user.email_confirmed_at || user.confirmed_at;
+  if (!confirmed) return redirectOut("not_confirmed");
+
+  // 3) Profil laden
   const { data: profile, error } = await supabase
     .from("profiles")
     .select("role, banned_until, banned_permanent")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
-  if (error) throw error;
+  if (error) return redirectOut("profile_error:" + (error.code || "err"));
+  if (!profile) return redirectOut("no_profile_row");
 
-  const isBanned = (profile?.banned_permanent === true) ||
-    (profile?.banned_until && Date.parse(profile.banned_until) > Date.now());
-  if (isBanned) await redirectOut();
-  if ((profile?.role || "").toLowerCase() !== "admin") await redirectOut();
-} catch {
-  await redirectOut();
-}
+  // 4) Bann prüfen
+  const isBanned =
+    profile.banned_permanent === true ||
+    (profile.banned_until && Date.parse(profile.banned_until) > Date.now());
+
+  if (isBanned) return redirectOut("banned");
+
+  // 5) Admin prüfen
+  const role = (profile.role || "").toLowerCase();
+  if (role !== "admin") return redirectOut("not_admin:" + role);
+
+  console.log("ADMIN-GUARD ok");
+})();

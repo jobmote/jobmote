@@ -1,7 +1,19 @@
+import { supabase } from "./supabaseClient.js";
+
+// erzwinge: JM benutzt exakt denselben Client wie admin.js
+console.log("ADMIN MODULE LOADED");
+
+const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
+console.log("SESSION:", sessionData, sessionErr);
+
+if (!sessionData?.session) {
+  window.location.replace("/login/");
+  throw new Error("No session");
+}
+
+
 // Admin – Users & Jobs (Supabase)
 (function () {
-  const JM = window.JM;
-
   function $(id) { return document.getElementById(id); }
 
   function esc(s) {
@@ -16,18 +28,41 @@
   }
 
   async function requireAdmin() {
-    if (JM.authReady) {
-      try { await JM.authReady; } catch {}
-    }
-    if (!JM.isAdmin?.()) {
-      window.location.replace("../index.html");
-      return false;
-    }
-    return true;
+  const msg = $("admin-msg");
+
+  msg.textContent = "Prüfe Admin…";
+
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData?.session) {
+    msg.textContent = "Nicht eingeloggt.";
+    window.location.replace("/login/"); // oder /index.html
+    return false;
   }
 
+  const userId = sessionData.session.user.id;
+
+  const { data: prof, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    msg.textContent = "Fehler beim Laden des Profils: " + error.message;
+    return false;
+  }
+
+  if ((prof?.role || "").toLowerCase() !== "admin") {
+    window.location.replace("/index.html");
+    return false;
+  }
+
+  msg.textContent = "";
+  return true;
+}
+
   async function fetchProfiles() {
-    const { data, error } = await JM.supabase
+    const { data, error } = await supabase
       .from("profiles")
       .select("id,email,role,banned_until,banned_permanent,created_at")
       .order("created_at", { ascending: false });
@@ -36,7 +71,7 @@
   }
 
   async function fetchJobs() {
-    const { data, error } = await JM.supabase
+    const { data, error } = await supabase
       .from("jobs")
       .select("id, company, title, created_at, owner_id")
       .order("created_at", { ascending: false });
@@ -45,7 +80,7 @@
   }
 
   async function setRole(userId, role) {
-    const { error } = await JM.supabase
+    const { error } = await supabase
       .from("profiles")
       .update({ role })
       .eq("id", userId);
@@ -53,7 +88,7 @@
   }
 
   async function banUser(userId, { untilIso = null, permanent = false } = {}) {
-    const { error } = await JM.supabase
+    const { error } = await supabase
       .from("profiles")
       .update({ banned_until: untilIso, banned_permanent: !!permanent })
       .eq("id", userId);
@@ -61,7 +96,7 @@
   }
 
   async function deleteJob(jobId) {
-    const { error } = await JM.supabase.from("jobs").delete().eq("id", jobId);
+    const { error } = await supabase.from("jobs").delete().eq("id", jobId);
     if (error) throw error;
   }
 
@@ -74,11 +109,11 @@
       return `
         <tr>
           <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);"><code>${esc(u.id)}</code></td>
-          <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">${esc(u.email || "–")}</td>
+          <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">${esc(u.email ?? "–")}</td>
           <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">
             <select data-role-id="${esc(u.id)}" class="input" style="min-width:150px;">
               <option value="user" ${role === "user" ? "selected" : ""}>user</option>
-              <option value="entrepreneur" ${role === "entrepreneur" ? "selected" : ""}>entrepreneur</option>
+              <option value="company" ${role === "company" ? "selected" : ""}>company</option>
               <option value="admin" ${role === "admin" ? "selected" : ""}>admin</option>
             </select>
           </td>
@@ -206,7 +241,7 @@
           const id = btn.getAttribute("data-del-job");
           if (!id) return;
           if (!confirm(`Job wirklich löschen?\n\nID: ${id}`)) return;
-          try { await deleteJob(Number(id)); await refresh(); } catch (e) { alert("Fehler: " + (e?.message || String(e))); }
+          try { await deleteJob(id); await refresh(); } catch (e) { alert("Fehler: " + (e?.message || String(e))); }
         });
       });
     } catch (e) {
@@ -214,10 +249,19 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    if (!(await requireAdmin())) return;
-    $("btn-refresh")?.addEventListener("click", refresh);
-    $("back-btn")?.addEventListener("click", () => history.back());
-    await refresh();
-  });
+ async function initAdmin() {
+  console.log("INIT ADMIN START");
+  if (!(await requireAdmin())) return;
+
+  $("btn-refresh")?.addEventListener("click", refresh);
+  $("back-btn")?.addEventListener("click", () => history.back());
+
+  await refresh();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAdmin);
+} else {
+  initAdmin();
+}
 })();
