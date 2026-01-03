@@ -117,7 +117,7 @@ JM.initTheme?.();
 
       if (JM.isCompany?.()) {
   list.appendChild(renderMenuLink("Meine Inserate", "/my-posted-jobs.html"));
-  list.appendChild(renderMenuLink("Job einstellen", "/post-job.html"));
+  list.appendChild(renderMenuLink("Job einstellen", "//post-job/"));
 }
 
 

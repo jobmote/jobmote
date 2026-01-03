@@ -5,7 +5,7 @@
   const PAGES = [
     { title: "Startseite", url: "index.html", text: "Remote Minijobs Filter Sortierung Favoriten" },
     { title: "Meine Jobs", url: "favorites.html", text: "gespeicherte Jobs Favoriten" },
-    { title: "Job einstellen", url: "post-job.html", text: "Unternehmen Job veröffentlichen" },
+    { title: "Job einstellen", url: "/post-job/", text: "Unternehmen Job veröffentlichen" },
     { title: "Hilfe / FAQ", url: "faq.html", text: "Hilfe FAQ seriöse Jobs" },
     { title: "Datenschutzerklärung", url: "datenschutz.html", text: "Datenschutzerklärung LocalStorage Cookies Rechte DSGVO" },
     { title: "Impressum", url: "impressum.html", text: "Impressum Kontakt Haftung" }
