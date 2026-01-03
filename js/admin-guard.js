@@ -2,7 +2,7 @@ import { getSupabase } from "/js/supabase.js";
 const supabase = await getSupabase();
 
 async function redirectOut() {
-  window.location.replace("../index.html");
+  window.location.replace("/index.html");
 }
 
 const { data } = await supabase.auth.getSession();
@@ -10,7 +10,8 @@ const user = data?.session?.user;
 if (!user) await redirectOut();
 
 // Require confirmed email
-if (!user.email_confirmed_at) await redirectOut();
+const confirmed = user.email_confirmed_at || user.confirmed_at;
+if (!confirmed) await redirectOut();
 
 // Option 1: profile role in public.profiles (recommended)
 try {
