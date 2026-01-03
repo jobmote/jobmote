@@ -4,10 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Job einstellen – jobmote.de</title>
-  <base href="/" />
-<link rel="icon" type="image/png" href="/assets/favicon.png">
-<link rel="stylesheet" href="/css/style.css" />
 
+  <!-- wichtig für Unterseiten wie /post-job/ -->
+  <base href="/" />
+
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body data-page="post-job">
@@ -21,8 +23,14 @@
 
     <div class="header-center">
       <form id="site-search-form" class="search-form" action="search.html" method="GET">
-        <input id="site-search-input" class="search-bar" name="q" type="text"
-          placeholder="Suche Jobs, Firmen, Keywords… 🔎" autocomplete="off" />
+        <input
+          id="site-search-input"
+          class="search-bar"
+          name="q"
+          type="text"
+          placeholder="Suche Jobs, Firmen, Keywords… 🔎"
+          autocomplete="off"
+        />
       </form>
     </div>
 
@@ -33,8 +41,14 @@
           <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
-      <button class="icon-btn" id="menu-toggle" type="button" aria-label="Menü öffnen"
-        aria-controls="side-menu" aria-expanded="false">☰</button>
+      <button
+        class="icon-btn"
+        id="menu-toggle"
+        type="button"
+        aria-label="Menü öffnen"
+        aria-controls="side-menu"
+        aria-expanded="false"
+      >☰</button>
     </div>
   </header>
 
@@ -70,12 +84,14 @@
     </section>
   </main>
 
+  <!-- Core -->
   <script defer src="/js/core.js"></script>
   <script defer src="/js/theme.js"></script>
 
-  <!-- WICHTIG: auth-session als EINZIGE Auth-Quelle -->
+  <!-- Auth (einzige Quelle) -->
   <script type="module" src="/js/auth-session.js"></script>
 
+  <!-- App libs -->
   <script defer src="/js/jobs.data.js"></script>
   <script defer src="/js/jobs.service.js"></script>
   <script defer src="/js/favorites.v2.js"></script>
@@ -84,6 +100,7 @@
   <script defer src="/js/ui.modal.js"></script>
   <script defer src="/js/page.search.js"></script>
 
+  <!-- Post Job -->
   <script defer src="/js/page.postjob.js?v=2"></script>
 
   <!-- Guard NACH auth-session -->
@@ -107,6 +124,7 @@
     }
   </script>
 
-  <script defer src="js/app.js"></script>
+  <!-- FIX: war vorher relativ -->
+  <script defer src="/js/app.js"></script>
 </body>
 </html>
