@@ -64,7 +64,7 @@ if (!sessionData?.session) {
   async function fetchProfiles() {
     const { data, error } = await supabase
       .from("profiles")
-      .select("id,role,banned_until,banned_permanent,created_at")
+      .select("id,email,role,banned_until,banned_permanent,created_at")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return data || [];
