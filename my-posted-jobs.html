@@ -4,56 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meine Inserate – jobmote.de</title>
-
-  <!-- ✅ ABSOLUTE PATHS -->
-  <link rel="icon" type="image/png" href="/assets/favicon.png">
-  <link rel="stylesheet" href="/css/style.css" />
-
-  <!-- Company-Guard: nur eingeloggte User mit role=company -->
-  <script type="module">
-    import { supabase } from "/js/supabase.js";
-
-    const { data, error } = await supabase.auth.getSession();
-    if (error) console.error("getSession error:", error);
-
-    if (!data?.session) {
-      location.replace("/login/");
-      throw new Error("No session");
-    }
-
-    const userId = data.session.user.id;
-
-    const { data: profile, error: pErr } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", userId)
-      .single();
-
-    if (pErr) {
-      console.error("Company guard: profile load error", pErr);
-      location.replace("/index.html");
-      throw pErr;
-    }
-
-    if ((profile?.role || "").toLowerCase() !== "company") {
-      location.replace("/index.html"); // kein Zugriff
-      throw new Error("Not company");
-    }
-  </script>
+  <link rel="icon" type="image/jpeg" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body data-page="my-posted-jobs">
   <header class="site-header">
     <div class="header-left">
-      <a class="brand-link" href="/index.html" aria-label="Startseite">
-        <img src="/assets/favicon.png" alt="jobmote.de" class="brand-icon" />
+      <a class="brand-link" href="index.html" aria-label="Startseite">
+        <img src="assets/favicon.png" alt="jobmote.de" class="brand-icon" />
         jobmote.de
       </a>
     </div>
 
     <div class="header-center">
-      <form id="site-search-form" class="search-form" action="/search.html" method="GET">
-        <input id="site-search-input" class="search-bar" name="q" type="text" placeholder="Suche Jobs, Firmen, Keywords… 🔎" autocomplete="off" />
+      <form id="site-search-form" class="search-form" action="search.html" method="GET">
+        <input id="site-search-input" class="search-bar" name="q" type="text"
+          placeholder="Suche Jobs, Firmen, Keywords… 🔎" autocomplete="off" />
       </form>
     </div>
 
@@ -65,7 +32,8 @@
         </svg>
       </button>
 
-      <button class="icon-btn" id="menu-toggle" type="button" aria-label="Menü öffnen" aria-controls="side-menu" aria-expanded="false">☰</button>
+      <button class="icon-btn" id="menu-toggle" type="button" aria-label="Menü öffnen"
+        aria-controls="side-menu" aria-expanded="false">☰</button>
     </div>
   </header>
 
@@ -76,14 +44,13 @@
       <span class="side-menu-title">Menü</span>
       <button class="close-btn" id="menu-close" type="button" aria-label="Menü schließen">✕</button>
     </div>
-
     <ul class="menu-list" id="menu-list"></ul>
   </nav>
 
   <main class="legal-container">
     <section class="legal-card">
       <h1>Meine Inserate</h1>
-      <p class="muted">Hier siehst du nur die Jobs, die du mit diesem Unternehmens-Account erstellt hast.</p>
+      <p class="muted">Hier siehst du nur die Jobs, die du mit diesem Company-Account erstellt hast.</p>
 
       <div class="results-bar simple">
         <div class="results-meta">
@@ -91,7 +58,7 @@
           <span class="muted">Inserate</span>
         </div>
         <div class="results-actions">
-          <a class="btn btn-ghost" href="/post-job.html">Neuen Job erstellen</a>
+          <a class="btn btn-ghost" href="post-job.html">Neuen Job erstellen</a>
         </div>
       </div>
 
@@ -100,12 +67,12 @@
       <div id="myj-empty" class="empty" hidden>
         <h3>Noch keine Inserate</h3>
         <p class="muted">Erstelle deinen ersten Job über „Job einstellen“.</p>
-        <a class="btn" href="/post-job.html">Job einstellen</a>
+        <a class="btn" href="post-job.html">Job einstellen</a>
       </div>
     </section>
   </main>
 
-  <!-- Modal (wird für Jobcards benötigt) -->
+  <!-- Modal wie gehabt -->
   <div id="job-modal-backdrop" class="modal-backdrop" aria-hidden="true" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-label="Jobdetails">
       <div class="modal-header">
@@ -133,28 +100,31 @@
     </div>
   </div>
 
-  <!-- ✅ ABSOLUTE PATHS -->
-  <script defer src="/js/core.js"></script>
-  <script defer src="/js/theme.js"></script>
+  <script defer src="js/core.js"></script>
+  <script defer src="js/theme.js"></script>
 
-  <!-- auth-session ist module -->
-  <script type="module" src="/js/auth-session.js"></script>
+  <script type="module" src="js/auth-session.js"></script>
 
-  <script defer src="/js/jobs.data.js"></script>
-  <script defer src="/js/jobs.service.js"></script>
-  <script defer src="/js/favorites.v2.js"></script>
-  <script defer src="/js/ui.menu.js"></script>
-  <script defer src="/js/render.js"></script>
-  <script defer src="/js/ui.modal.js"></script>
-  <script defer src="/js/page.home.js"></script>
-  <script defer src="/js/page.favorites.js"></script>
-  <script defer src="/js/page.search.js"></script>
-  <script defer src="/js/page.postjob.js"></script>
+  <script defer src="js/jobs.data.js"></script>
+  <script defer src="js/jobs.service.js"></script>
+  <script defer src="js/favorites.v2.js"></script>
+  <script defer src="js/ui.menu.js"></script>
+  <script defer src="js/render.js"></script>
+  <script defer src="js/ui.modal.js"></script>
+  <script defer src="js/page.search.js"></script>
 
-  <!-- optional: cache buster -->
-  <script defer src="/js/page.my-posted-jobs.js?v=2"></script>
+  <script defer src="js/page.my-posted-jobs.js?v=2"></script>
 
-  <script defer src="/js/app.js"></script>
+  <script type="module">
+    const wait = (ms) => new Promise(r => setTimeout(r, ms));
+    while (!window.JM || !window.JM.authReady) await wait(30);
+    try { await window.JM.authReady; } catch {}
+
+    const u = window.JM.getCurrentUser?.();
+    const ok = !!u && window.JM.isCompany?.();
+    if (!ok) location.replace(u ? "/index.html" : "/login/");
+  </script>
+
+  <script defer src="js/app.js"></script>
 </body>
 </html>
-
