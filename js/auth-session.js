@@ -66,7 +66,7 @@ async function init() {
 
   JM.getCurrentUser = () => JM.currentUser;
   JM.isAdmin = () => (JM.currentUser?.role || "") === "admin";
-  JM.isEntrepreneur = () => (JM.currentUser?.role || "") === "entrepreneur";
+  JM.isCompany = () => (JM.currentUser?.role || "") === "company";
 
   JM.signOut = async function () {
     try {
