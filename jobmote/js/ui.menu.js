@@ -81,7 +81,7 @@
         list.appendChild(renderMenuLink("Gespeicherte Jobs", "favorites.html"));
         if (JM.isCompany?.()) {
           list.appendChild(renderMenuLink("Meine Inserate", "my-posted-jobs.html"));
-          list.appendChild(renderMenuLink("Job einstellen", "post-job.html"));
+          list.appendChild(renderMenuLink("Job einstellen", "/post-job/"));
         }
         if (JM.isAdmin?.()) list.appendChild(renderMenuLink("Admin", "admin/index.html"));
         list.appendChild(renderMenuLink("Logout", "#", { id: "logout-link" }));
