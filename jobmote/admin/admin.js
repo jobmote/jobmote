@@ -78,7 +78,7 @@
           <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">
             <select data-role-id="${esc(u.id)}" class="input" style="min-width:150px;">
               <option value="user" ${role === "user" ? "selected" : ""}>user</option>
-              <option value="entrepreneur" ${role === "entrepreneur" ? "selected" : ""}>entrepreneur</option>
+              <option value="company" ${role === "company" ? "selected" : ""}>company</option>
               <option value="admin" ${role === "admin" ? "selected" : ""}>admin</option>
             </select>
           </td>
