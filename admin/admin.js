@@ -1,7 +1,5 @@
 // Admin – Users & Jobs (Supabase)
 (function () {
-  const JM = window.JM;
-
   function $(id) { return document.getElementById(id); }
 
   function esc(s) {
@@ -16,18 +14,29 @@
   }
 
   async function requireAdmin() {
-    if (JM.authReady) {
-      try { await JM.authReady; } catch {}
-    }
-    if (!JM.isAdmin?.()) {
-      window.location.replace("/index.html");
-      return false;
-    }
-    return true;
+  // Warte bis window.JM existiert und die Helpers da sind
+  for (let i = 0; i < 100; i++) { // ~5s max
+    if (window.JM && window.JM.authReady && window.JM.isAdmin && window.JM.supabase) break;
+    await new Promise(r => setTimeout(r, 50));
   }
 
+  if (!window.JM || !window.JM.authReady) {
+  console.error("Admin: JM not ready");
+  $("admin-msg").textContent = "Auth lädt noch… bitte neu laden (Strg+F5).";
+  return false;
+}
+
+  try { await window.JM.authReady; } catch {}
+
+  if (!window.JM.isAdmin?.()) {
+    window.location.replace("/index.html");
+    return false;
+  }
+
+  return true;
+}
   async function fetchProfiles() {
-    const { data, error } = await JM.supabase
+    const { data, error } = await window.JM.supabase
       .from("profiles")
       .select("id,email,role,banned_until,banned_permanent,created_at")
       .order("created_at", { ascending: false });
@@ -36,7 +45,7 @@
   }
 
   async function fetchJobs() {
-    const { data, error } = await JM.supabase
+    const { data, error } = await window.JM.supabase
       .from("jobs")
       .select("id, company, title, created_at, owner_id")
       .order("created_at", { ascending: false });
@@ -45,7 +54,7 @@
   }
 
   async function setRole(userId, role) {
-    const { error } = await JM.supabase
+    const { error } = await window.JM.supabase
       .from("profiles")
       .update({ role })
       .eq("id", userId);
@@ -53,7 +62,7 @@
   }
 
   async function banUser(userId, { untilIso = null, permanent = false } = {}) {
-    const { error } = await JM.supabase
+    const { error } = await window.JM.supabase
       .from("profiles")
       .update({ banned_until: untilIso, banned_permanent: !!permanent })
       .eq("id", userId);
@@ -61,7 +70,7 @@
   }
 
   async function deleteJob(jobId) {
-    const { error } = await JM.supabase.from("jobs").delete().eq("id", jobId);
+    const { error } = await window.JM.supabase.from("jobs").delete().eq("id", jobId);
     if (error) throw error;
   }
 
@@ -206,7 +215,7 @@
           const id = btn.getAttribute("data-del-job");
           if (!id) return;
           if (!confirm(`Job wirklich löschen?\n\nID: ${id}`)) return;
-          try { await deleteJob(Number(id)); await refresh(); } catch (e) { alert("Fehler: " + (e?.message || String(e))); }
+          try { await deleteJob(id); await refresh(); } catch (e) { alert("Fehler: " + (e?.message || String(e))); }
         });
       });
     } catch (e) {
