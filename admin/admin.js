@@ -249,10 +249,19 @@ if (!sessionData?.session) {
     }
   }
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    if (!(await requireAdmin())) return;
-    $("btn-refresh")?.addEventListener("click", refresh);
-    $("back-btn")?.addEventListener("click", () => history.back());
-    await refresh();
-  });
+ async function initAdmin() {
+  console.log("INIT ADMIN START");
+  if (!(await requireAdmin())) return;
+
+  $("btn-refresh")?.addEventListener("click", refresh);
+  $("back-btn")?.addEventListener("click", () => history.back());
+
+  await refresh();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAdmin);
+} else {
+  initAdmin();
+}
 })();
