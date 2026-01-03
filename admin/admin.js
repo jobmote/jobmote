@@ -1,18 +1,16 @@
 import { supabase } from "./supabaseClient.js";
 
 // erzwinge: JM benutzt exakt denselben Client wie admin.js
-window.JM = window.JM || {};
-window.JM.supabase = supabase;
-
 console.log("ADMIN MODULE LOADED");
 
 const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
 console.log("SESSION:", sessionData, sessionErr);
 
 if (!sessionData?.session) {
-  alert("Keine Session gefunden. Du bist für Supabase gerade ANON.");
+  window.location.replace("/login/");
   throw new Error("No session");
 }
+
 
 // Admin – Users & Jobs (Supabase)
 (function () {
@@ -30,27 +28,39 @@ if (!sessionData?.session) {
   }
 
   async function requireAdmin() {
-  // Warte bis window.JM existiert und die Helpers da sind
-  for (let i = 0; i < 100; i++) { // ~5s max
-    if (window.JM && window.JM.authReady && window.JM.isAdmin && window.JM.supabase) break;
-    await new Promise(r => setTimeout(r, 50));
+  const msg = $("admin-msg");
+
+  msg.textContent = "Prüfe Admin…";
+
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData?.session) {
+    msg.textContent = "Nicht eingeloggt.";
+    window.location.replace("/login/"); // oder /index.html
+    return false;
   }
 
-  if (!window.JM || !window.JM.authReady) {
-  console.error("Admin: JM not ready");
-  $("admin-msg").textContent = "Auth lädt noch… bitte neu laden (Strg+F5).";
-  return false;
-}
+  const userId = sessionData.session.user.id;
 
-  try { await window.JM.authReady; } catch {}
+  const { data: prof, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .single();
 
-  if (!window.JM.isAdmin?.()) {
+  if (error) {
+    msg.textContent = "Fehler beim Laden des Profils: " + error.message;
+    return false;
+  }
+
+  if ((prof?.role || "").toLowerCase() !== "admin") {
     window.location.replace("/index.html");
     return false;
   }
 
+  msg.textContent = "";
   return true;
 }
+
   async function fetchProfiles() {
     const { data, error } = await supabase
       .from("profiles")
@@ -70,7 +80,7 @@ if (!sessionData?.session) {
   }
 
   async function setRole(userId, role) {
-    const { error } = await window.JM.supabase
+    const { error } = await supabase
       .from("profiles")
       .update({ role })
       .eq("id", userId);
@@ -78,7 +88,7 @@ if (!sessionData?.session) {
   }
 
   async function banUser(userId, { untilIso = null, permanent = false } = {}) {
-    const { error } = await window.JM.supabase
+    const { error } = await supabase
       .from("profiles")
       .update({ banned_until: untilIso, banned_permanent: !!permanent })
       .eq("id", userId);
@@ -86,7 +96,7 @@ if (!sessionData?.session) {
   }
 
   async function deleteJob(jobId) {
-    const { error } = await window.JM.supabase.from("jobs").delete().eq("id", jobId);
+    const { error } = await supabase.from("jobs").delete().eq("id", jobId);
     if (error) throw error;
   }
 
