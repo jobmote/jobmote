@@ -1,1 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job einstellen – jobmote.de</title>
+  <link rel="icon" type="image/jpeg" href="assets/favicon.png">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
 
+<body data-page="post-job">
+  <header class="site-header">
+    <div class="header-left">
+      <a class="brand-link" href="index.html" aria-label="Startseite">
+        <img src="assets/favicon.png" alt="jobmote.de" class="brand-icon" />
+        jobmote.de
+      </a>
+    </div>
+
+    <div class="header-center">
+      <form id="site-search-form" class="search-form" action="search.html" method="GET">
+        <input id="site-search-input" class="search-bar" name="q" type="text"
+          placeholder="Suche Jobs, Firmen, Keywords… 🔎" autocomplete="off" />
+      </form>
+    </div>
+
+    <div class="header-right">
+      <button class="icon-btn" id="account-btn" type="button" aria-label="Account">
+        <svg class="icon-svg-user" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="menu-toggle" type="button" aria-label="Menü öffnen"
+        aria-controls="side-menu" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <div id="menu-overlay" class="menu-overlay" aria-hidden="true"></div>
+
+  <nav id="side-menu" class="side-menu" aria-label="Seitenmenü">
+    <div class="side-menu-header">
+      <span class="side-menu-title">Menü</span>
+      <button class="close-btn" id="menu-close" type="button" aria-label="Menü schließen">✕</button>
+    </div>
+    <ul class="menu-list" id="menu-list"></ul>
+  </nav>
+
+  <main class="legal-container">
+    <section class="legal-card">
+      <h1>Job einstellen</h1>
+      <p class="muted">Job wird in Supabase gespeichert (Owner = aktueller User).</p>
+
+      <div class="notice" id="post-job-guard" hidden>
+        <h3>Nur als Unternehmen</h3>
+        <p class="muted">Bitte melde dich mit einem <strong>Company</strong>-Account an.</p>
+        <div class="row">
+          <a class="btn" href="/register/">Registrieren</a>
+          <a class="btn btn-ghost" href="/login/">Anmelden</a>
+        </div>
+      </div>
+
+      <form class="form" id="post-job-form">
+        <!-- dein Formular bleibt wie gehabt -->
+        <!-- ... -->
+        <p class="muted" id="post-job-msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <script defer src="js/core.js"></script>
+  <script defer src="js/theme.js"></script>
+
+  <!-- WICHTIG: auth-session als EINZIGE Auth-Quelle -->
+  <script type="module" src="js/auth-session.js"></script>
+
+  <script defer src="js/jobs.data.js"></script>
+  <script defer src="js/jobs.service.js"></script>
+  <script defer src="js/favorites.v2.js"></script>
+  <script defer src="js/ui.menu.js"></script>
+  <script defer src="js/render.js"></script>
+  <script defer src="js/ui.modal.js"></script>
+  <script defer src="js/page.search.js"></script>
+
+  <script defer src="js/page.postjob.js?v=2"></script>
+
+  <!-- Guard NACH auth-session -->
+  <script type="module">
+    const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+    // warte auf JM + authReady
+    while (!window.JM || !window.JM.authReady) await wait(30);
+    try { await window.JM.authReady; } catch {}
+
+    const u = window.JM.getCurrentUser?.();
+    const ok = !!u && window.JM.isCompany?.();
+
+    if (!ok) {
+      const guard = document.getElementById("post-job-guard");
+      const form = document.getElementById("post-job-form");
+      if (guard) guard.hidden = false;
+      if (form) form.style.display = "none";
+      // optional: wenn gar nicht eingeloggt -> login
+      if (!u) location.replace("/login/");
+    }
+  </script>
+
+  <script defer src="js/app.js"></script>
+</body>
+</html>
