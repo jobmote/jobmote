@@ -109,7 +109,7 @@ if (!sessionData?.session) {
       return `
         <tr>
           <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);"><code>${esc(u.id)}</code></td>
-          <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">–</td>
+          <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">${esc(u.email ?? "–")}</td>
           <td style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.10);">
             <select data-role-id="${esc(u.id)}" class="input" style="min-width:150px;">
               <option value="user" ${role === "user" ? "selected" : ""}>user</option>
