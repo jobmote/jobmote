@@ -1,6 +1,6 @@
 // jobmote.de – Auth Session (Supabase)
 // - No local demo users / sessions
-// - Provides JM.getCurrentUser(), JM.isAdmin(), JM.isEntrepreneur(), JM.signOut()
+// - Provides JM.getCurrentUser(), JM.isAdmin(), JM.isCompany(), JM.signOut()
 // - Exposes JM.authReady (Promise) so non-module scripts can await if needed
 
 import { getSupabase } from "/js/supabase.js";
@@ -70,7 +70,7 @@ async function init() {
 
   JM.getCurrentUser = () => JM.currentUser;
   JM.isAdmin = () => (JM.currentUser?.role || "") === "admin";
-  JM.isEntrepreneur = () => (JM.currentUser?.role || "") === "entrepreneur";
+  JM.isCompany = () => (JM.currentUser?.role || "") === "company";
 
   JM.signOut = async () => {
     await supabase.auth.signOut();
