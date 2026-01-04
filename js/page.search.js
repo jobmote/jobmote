@@ -49,7 +49,7 @@
       const jobs = JM.loadAllJobs();
 
       for (const job of jobs) {
-        const hay = `${job.employer} ${job.title} ${job.description} ${job.category} ${job.language} ${job.region} ${job.pay} ${job.hoursPerWeek}`.toLowerCase();
+        const hay = `${job.company} ${job.title} ${job.description} ${job.category} ${job.language} ${job.region} ${job.pay} ${job.hoursPerWeek}`.toLowerCase();
         if (!hay.includes(q)) continue;
 
         hits.push({
@@ -57,7 +57,7 @@
           score: occurrences(hay, q),
           title: `Job: ${job.title}`,
           url: `index.html?q=${encodeURIComponent(qRaw)}#${encodeURIComponent(job.id)}`,
-          snippet: `${job.employer} – ${JM.formatEuro(job.pay)} / Std – ${job.category} – ${JM.regionLabel(job.region)}`,
+          snippet: `${job.company} – ${JM.formatEuro(job.pay)} / Std – ${job.category} – ${JM.regionLabel(job.region)}`,
           createdAt: job.createdAt,
           pay: Number(job.pay) || 0
         });

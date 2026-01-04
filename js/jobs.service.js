@@ -78,7 +78,7 @@
 
     const payload = {
       owner_id: u.id,
-      company: job.company,
+      employer: job.company,
       title: job.title,
       description: job.description,
       pay: job.pay,

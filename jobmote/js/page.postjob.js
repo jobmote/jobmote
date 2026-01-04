@@ -217,7 +217,7 @@
         featured: false
       };
 
-      if (!baseJob.title || !baseJob.employer || !baseJob.description) {
+      if (!baseJob.title || !basejob.company || !baseJob.description) {
         if (msg) msg.textContent = "Bitte alle Pflichtfelder ausfüllen.";
         return;
       }
