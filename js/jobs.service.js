@@ -39,7 +39,7 @@
     const { data, error } = await supabase
       .from("jobs")
       .select("id, company, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false, nullsFirst: false });
 
     if (error) throw error;
     JM.state.remoteJobs = (data || []).map(mapRowToJob);
