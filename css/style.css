@@ -627,5 +627,84 @@ body.light-mode select optgroup{
     padding-top: 80px; /* Höhe des Headers anpassen */
   }
 }
+/* =========================
+   Post Job – Form Polish
+   ========================= */
+body[data-page="post-job"] .legal-card .form {
+  margin-top: 18px;
+}
+
+body[data-page="post-job"] .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+body[data-page="post-job"] label {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+body[data-page="post-job"] input,
+body[data-page="post-job"] select,
+body[data-page="post-job"] textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* bessere Grids */
+body[data-page="post-job"] .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+body[data-page="post-job"] .grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 900px) {
+  body[data-page="post-job"] .grid-2,
+  body[data-page="post-job"] .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Textarea größer + schöner */
+body[data-page="post-job"] textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+/* File input row hübscher */
+body[data-page="post-job"] #pj-logo {
+  padding: 10px 12px;
+}
+
+/* Preview Bild sauber */
+body[data-page="post-job"] #pj-logo-preview {
+  display: none;
+}
+body[data-page="post-job"] #pj-logo-preview[src] {
+  display: block;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Buttons Abstand */
+body[data-page="post-job"] .row {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+body[data-page="post-job"] hr {
+  margin: 18px 0;
+  opacity: 0.25;
+}
+
 
 
