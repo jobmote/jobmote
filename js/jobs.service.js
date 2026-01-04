@@ -95,7 +95,7 @@
     const { data, error } = await supabase
       .from("jobs")
       .insert(payload)
-      .select("id, employer, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
+      .select("id, company, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
       .single();
     if (error) throw error;
 
@@ -107,7 +107,7 @@
   JM.updateJob = async (jobId, patch) => {
     const supabase = JM.supabase;
     const payload = {
-      employer: patch.employer,
+      company: patch.company,
       title: patch.title,
       description: patch.description,
       pay: patch.pay,
@@ -129,7 +129,7 @@
       .from("jobs")
       .update(payload)
       .eq("id", jobId)
-      .select("id, employer, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
+      .select("id, company, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
       .single();
     if (error) throw error;
     await JM.refreshRemoteJobs();

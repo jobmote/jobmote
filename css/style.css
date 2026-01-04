@@ -627,5 +627,217 @@ body.light-mode select optgroup{
     padding-top: 80px; /* Höhe des Headers anpassen */
   }
 }
+/* =========================
+   Post Job – Form Polish
+   ========================= */
+body[data-page="post-job"] .legal-card .form {
+  margin-top: 18px;
+}
+
+body[data-page="post-job"] .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+body[data-page="post-job"] label {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+body[data-page="post-job"] input,
+body[data-page="post-job"] select,
+body[data-page="post-job"] textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* bessere Grids */
+body[data-page="post-job"] .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+body[data-page="post-job"] .grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 900px) {
+  body[data-page="post-job"] .grid-2,
+  body[data-page="post-job"] .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Textarea größer + schöner */
+body[data-page="post-job"] textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+/* File input row hübscher */
+body[data-page="post-job"] #pj-logo {
+  padding: 10px 12px;
+}
+
+/* Preview Bild sauber */
+body[data-page="post-job"] #pj-logo-preview {
+  display: none;
+}
+body[data-page="post-job"] #pj-logo-preview[src] {
+  display: block;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Buttons Abstand */
+body[data-page="post-job"] .row {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+body[data-page="post-job"] hr {
+  margin: 18px 0;
+  opacity: 0.25;
+}
+/* =========================
+   Post Job – Color / UI Polish
+   ========================= */
+
+body[data-page="post-job"] .legal-card{
+  background: rgba(20, 22, 26, 0.88);
+  border: 1px solid rgba(0, 255, 200, 0.22);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.35), 0 14px 40px rgba(0,0,0,0.55);
+}
+
+body[data-page="post-job"] .legal-card h1{
+  color: #ff8a2a; /* bleibt dein Orange-Headline */
+}
+
+body[data-page="post-job"] .muted{
+  color: rgba(255,255,255,0.72);
+}
+
+/* Inputs / Selects / Textarea: ruhig & modern */
+body[data-page="post-job"] input,
+body[data-page="post-job"] select,
+body[data-page="post-job"] textarea{
+  background: rgba(10, 12, 15, 0.85);
+  color: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  padding: 11px 12px;
+  outline: none;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+/* Placeholder angenehmer */
+body[data-page="post-job"] input::placeholder,
+body[data-page="post-job"] textarea::placeholder{
+  color: rgba(255,255,255,0.40);
+}
+
+/* Hover: minimal heller */
+body[data-page="post-job"] input:hover,
+body[data-page="post-job"] select:hover,
+body[data-page="post-job"] textarea:hover{
+  border-color: rgba(0,255,200,0.22);
+}
+
+/* Focus: türkis, aber dezent */
+body[data-page="post-job"] input:focus,
+body[data-page="post-job"] select:focus,
+body[data-page="post-job"] textarea:focus{
+  background: rgba(10, 12, 15, 0.95);
+  border-color: rgba(0,255,200,0.55);
+  box-shadow: 0 0 0 4px rgba(0,255,200,0.12);
+}
+
+/* Select Pfeil/Innenleben (Browser abhängig, hilft aber oft) */
+body[data-page="post-job"] select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.55) 50%),
+    linear-gradient(135deg, rgba(255,255,255,0.55) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 12px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 34px;
+}
+
+/* Labels: klarer, nicht zu grell */
+body[data-page="post-job"] label{
+  color: rgba(255,255,255,0.88);
+}
+
+body[data-page="post-job"] .req{
+  color: rgba(0,255,200,0.85);
+}
+
+/* Textarea */
+body[data-page="post-job"] textarea{
+  min-height: 160px;
+  line-height: 1.35;
+}
+
+/* HR dezenter */
+body[data-page="post-job"] hr{
+  border: none;
+  height: 1px;
+  background: rgba(255,255,255,0.10);
+}
+
+/* File input + "Logo entfernen" Button harmonisieren */
+body[data-page="post-job"] input[type="file"]{
+  background: rgba(10, 12, 15, 0.55);
+  border: 1px dashed rgba(255,255,255,0.16);
+  padding: 10px 12px;
+}
+
+body[data-page="post-job"] .btn.btn-ghost{
+  border-color: rgba(0,255,200,0.35);
+  color: rgba(0,255,200,0.95);
+}
+
+body[data-page="post-job"] .btn.btn-ghost:hover{
+  background: rgba(0,255,200,0.10);
+  border-color: rgba(0,255,200,0.55);
+}
+
+/* Primärbutton (Job veröffentlichen) etwas ruhiger */
+body[data-page="post-job"] .btn{
+  box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+}
+
+body[data-page="post-job"] #post-job-form .btn[type="submit"]{
+  background: linear-gradient(135deg, rgba(0,255,200,0.95), rgba(0,190,255,0.90));
+  color: rgba(0,0,0,0.92);
+  border: none;
+}
+
+body[data-page="post-job"] #post-job-form .btn[type="submit"]:hover{
+  filter: brightness(1.06);
+}
+
+/* Live Preview Card: nicht so „glowy“ */
+body[data-page="post-job"] #pj-card-preview{
+  margin-top: 12px;
+}
+
+body[data-page="post-job"] #pj-card-preview .job-card,
+body[data-page="post-job"] #pj-card-preview .card,
+body[data-page="post-job"] #pj-card-preview > *{
+  box-shadow: none !important;
+}
+
 
 
