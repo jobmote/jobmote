@@ -38,10 +38,8 @@ async function buildCurrentUser(supabase) {
   if (!user) return null;
 
   const confirmed = user.email_confirmed_at || user.confirmed_at;
-  if (!confirmed) {
-    // nicht signOut!
-    return null;
-  }
+// NICHT return null – sonst wirken Nutzer “ausgeloggt”, obwohl Session existiert.
+
 
   const profile = await loadProfile(supabase, user);
   if (isBanned(profile)) {
