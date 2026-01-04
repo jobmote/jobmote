@@ -5,7 +5,7 @@
   JM.DEFAULT_JOBS = [
     {
       id: "job-1",
-      employer: "RemoteSupport24",
+      company: "RemoteSupport24",
       title: "Kundenservice Chat (Remote)",
       description: "Du beantwortest Kundenfragen per Chat. Einfache Prozesse, klare Textbausteine, Einarbeitung inklusive.",
       pay: 15.0,
@@ -21,7 +21,7 @@
     },
     {
       id: "job-2",
-      employer: "CreatorBoost",
+      company: "CreatorBoost",
       title: "TikTok / Reels Content Assistant",
       description: "Unterstütze beim Schneiden, Captioning und Planen von Kurzvideos. Remote, kreative Aufgaben, klare Briefings.",
       pay: 20.0,
@@ -37,7 +37,7 @@
     },
     {
       id: "job-3",
-      employer: "DataClean GmbH",
+      company: "DataClean GmbH",
       title: "Datenpflege / Excel (Remote)",
       description: "Daten aus PDFs/Listen in Tabellen übertragen, Dubletten prüfen, einfache Qualitätssicherung.",
       pay: 12.0,
@@ -53,7 +53,7 @@
     },
     {
       id: "job-4",
-      employer: "Labelify AI",
+      company: "Labelify AI",
       title: "AI-Tasks: Text Labeling (Remote)",
       description: "Du klassifizierst kurze Textausschnitte nach klaren Regeln. Perfekt als Nebenjob, flexibel planbar.",
       pay: 17.5,
@@ -69,7 +69,7 @@
     },
     {
       id: "job-5",
-      employer: "SalesSprint",
+      company: "SalesSprint",
       title: "Outbound Lead Research (Remote)",
       description: "Du recherchierst passende Leads und pflegst Kontaktlisten. Kein Cold Calling – nur Recherche & Struktur.",
       pay: 14.0,
@@ -85,7 +85,7 @@
     },
     {
       id: "job-6",
-      employer: "RemoteSupport24",
+      company: "RemoteSupport24",
       title: "Kundenservice Chat (Remote)",
       description: "Du beantwortest Kundenfragen per Chat. Einfache Prozesse, klare Textbausteine, Einarbeitung inklusive.",
       pay: 15.0,
@@ -101,7 +101,7 @@
     },
     {
       id: "job-7",
-      employer: "ContentFlow",
+      company: "ContentFlow",
       title: "Instagram Post Scheduler",
       description: "Plane und veröffentliche Instagram-Posts nach klaren Vorgaben. Kein Community-Management.",
       pay: 16.0,
@@ -117,7 +117,7 @@
     },
     {
       id: "job-8",
-      employer: "SheetPro",
+      company: "SheetPro",
       title: "Excel Datenübertragung",
       description: "Übertrage strukturierte Daten aus PDFs in Excel-Tabellen. Klare Vorgaben.",
       pay: 13.0,
@@ -133,7 +133,7 @@
     },
     {
       id: "job-9",
-      employer: "AnnotateAI",
+      company: "AnnotateAI",
       title: "AI Text Annotation",
       description: "Markiere Texte nach vorgegebenen Regeln für KI-Trainingsdaten.",
       pay: 18.0,
@@ -149,7 +149,7 @@
     },
     {
       id: "job-10",
-      employer: "LeadStack",
+      company: "LeadStack",
       title: "LinkedIn Lead Recherche",
       description: "Recherche von Unternehmen und Ansprechpartnern auf LinkedIn. Kein Kontakt mit Leads.",
       pay: 14.5,
@@ -165,7 +165,7 @@
     },
     {
       id: "job-11",
-      employer: "HelpDeskNow",
+      company: "HelpDeskNow",
       title: "E-Mail Kundenservice",
       description: "Bearbeitung von Kundenanfragen per E-Mail anhand von Vorlagen.",
       pay: 15.5,
@@ -181,7 +181,7 @@
     },
     {
       id: "job-12",
-      employer: "VideoBoost",
+      company: "VideoBoost",
       title: "YouTube Thumbnail Assistant",
       description: "Erstellung einfacher Thumbnails nach festen Layouts. Keine Designkenntnisse nötig.",
       pay: 17.0,
@@ -197,7 +197,7 @@
     },
     {
       id: "job-13",
-      employer: "CleanDataOps",
+      company: "CleanDataOps",
       title: "Datenvalidierung (Remote)",
       description: "Überprüfung bestehender Datensätze auf Vollständigkeit und Korrektheit.",
       pay: 13.5,
@@ -213,7 +213,7 @@
     },
     {
       id: "job-14",
-      employer: "SmartLabel",
+      company: "SmartLabel",
       title: "AI Image Tagging",
       description: "Vergabe von Tags für Bilder nach klar definierten Kriterien.",
       pay: 19.0,
@@ -229,7 +229,7 @@
     },
     {
       id: "job-15",
-      employer: "SalesAssist",
+      company: "SalesAssist",
       title: "CRM Datenpflege",
       description: "Pflege und Aktualisierung von CRM-Datensätzen nach festen Regeln.",
       pay: 14.0,
@@ -245,7 +245,7 @@
     },
     {
       id: "job-16",
-      employer: "SupportFlow",
+      company: "SupportFlow",
       title: "Live-Chat Support (Wochenende)",
       description: "Betreuung von Kundenanfragen per Live-Chat am Wochenende. Klare Prozesse, kein Telefon.",
       pay: 16.0,
@@ -261,7 +261,7 @@
     },
     {
       id: "job-17",
-      employer: "SocialPilot",
+      company: "SocialPilot",
       title: "Facebook Post Assistant",
       description: "Vorbereitung und Planung von Facebook-Posts nach festen Redaktionsplänen.",
       pay: 15.0,
@@ -277,7 +277,7 @@
     },
     {
       id: "job-18",
-      employer: "TableFix",
+      company: "TableFix",
       title: "Excel Qualitätsprüfung",
       description: "Prüfung bestehender Excel-Tabellen auf Fehler und Inkonsistenzen.",
       pay: 13.5,
@@ -293,7 +293,7 @@
     },
     {
       id: "job-19",
-      employer: "TextMind AI",
+      company: "TextMind AI",
       title: "AI Text Klassifizierung",
       description: "Einordnung kurzer Texte für KI-Modelle anhand klarer Vorgaben.",
       pay: 18.5,
@@ -309,7 +309,7 @@
     },
     {
       id: "job-20",
-      employer: "PipelineSales",
+      company: "PipelineSales",
       title: "B2B Lead Liste erstellen",
       description: "Recherche von B2B-Unternehmen und Pflege strukturierter Lead-Listen.",
       pay: 14.0,
@@ -325,7 +325,7 @@
     },
     {
       id: "job-21",
-      employer: "MailCare",
+      company: "MailCare",
       title: "E-Mail Support Agent",
       description: "Bearbeitung von Support-Anfragen per E-Mail anhand von Vorlagen.",
       pay: 15.5,
@@ -341,7 +341,7 @@
     },
     {
       id: "job-22",
-      employer: "ClipFactory",
+      company: "ClipFactory",
       title: "Short-Video Beschreibung schreiben",
       description: "Erstellung kurzer Beschreibungen und Hashtags für Reels & Shorts.",
       pay: 16.5,
@@ -357,7 +357,7 @@
     },
     {
       id: "job-23",
-      employer: "DataReview",
+      company: "DataReview",
       title: "Datensatz-Review",
       description: "Überprüfung großer Datensätze auf Vollständigkeit und Plausibilität.",
       pay: 13.0,
@@ -373,7 +373,7 @@
     },
     {
       id: "job-24",
-      employer: "VisionTag",
+      company: "VisionTag",
       title: "AI Bildklassifikation",
       description: "Kategorisierung von Bildern für KI-Trainingszwecke.",
       pay: 19.5,
@@ -389,7 +389,7 @@
     },
     {
       id: "job-25",
-      employer: "DealFinder",
+      company: "DealFinder",
       title: "Vertriebsdaten Pflege",
       description: "Aktualisierung und Pflege bestehender Vertriebsdatenbanken.",
       pay: 14.5,
@@ -405,7 +405,7 @@
     },
     {
       id: "job-26",
-      employer: "ChatAssist",
+      company: "ChatAssist",
       title: "Kundenchat Frühschicht",
       description: "Beantwortung von Kundenanfragen per Chat in den Morgenstunden.",
       pay: 15.0,
@@ -421,7 +421,7 @@
     },
     {
       id: "job-27",
-      employer: "PostCraft",
+      company: "PostCraft",
       title: "LinkedIn Text Posts schreiben",
       description: "Verfassen kurzer LinkedIn-Beiträge nach Themenvorgaben.",
       pay: 17.0,
@@ -437,7 +437,7 @@
     },
     {
       id: "job-28",
-      employer: "SheetLogic",
+      company: "SheetLogic",
       title: "Google Sheets Datenpflege",
       description: "Pflege und Aktualisierung von Google-Sheets-Dokumenten.",
       pay: 13.5,
@@ -453,7 +453,7 @@
     },
     {
       id: "job-29",
-      employer: "LabelCore",
+      company: "LabelCore",
       title: "AI Content Review",
       description: "Überprüfung von KI-generierten Inhalten nach Qualitätskriterien.",
       pay: 20.0,
@@ -469,7 +469,7 @@
     },
     {
       id: "job-30",
-      employer: "SalesTracker",
+      company: "SalesTracker",
       title: "CRM Reporting Assistant",
       description: "Erstellung einfacher Reports aus bestehenden CRM-Daten.",
       pay: 15.0,
