@@ -189,25 +189,6 @@
   <!-- Auth (einzige Quelle) -->
   <script type="module" src="/js/auth-session.js"></script>
 
-  <!-- Guard NACH auth-session, VOR page.postjob -->
-  <script type="module">
-    const wait = (ms) => new Promise(r => setTimeout(r, ms));
-
-    while (!window.JM || !window.JM.authReady) await wait(30);
-    try { await window.JM.authReady; } catch {}
-
-    const u = window.JM.getCurrentUser?.();
-    const ok = !!u && window.JM.isCompany?.();
-
-    if (!ok) {
-      const guard = document.getElementById("post-job-guard");
-      const form = document.getElementById("post-job-form");
-      if (guard) guard.hidden = false;
-      if (form) form.style.display = "none";
-      if (!u) location.replace("/login/");
-    }
-  </script>
-
   <!-- App libs -->
   <script defer src="/js/jobs.data.js"></script>
   <script defer src="/js/jobs.service.js"></script>
