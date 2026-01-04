@@ -506,10 +506,10 @@
           const updated = await updateJobWithFallback(supabase, uid, editId, baseJob, isAdmin);
           setMsg(msg, "✅ Gespeichert (ID: " + updated.id + ")", true);
         } else {
-          // INSERT: per REST (liefert immer Status/Fehler)
-          const created = await insertJobViaRest(supabase, uid, baseJob);
-          setMsg(msg, "✅ Veröffentlicht (ID: " + created.id + ")", true);
-        }
+  // INSERT: über supabase-js (robuster als REST im Browser-Setup)
+  const created = await insertJobWithFallback(supabase, uid, baseJob);
+  setMsg(msg, "✅ Veröffentlicht (ID: " + created.id + ")", true);
+}
 
         setTimeout(() => (window.location.href = "/my-posted-jobs.html"), 700);
       } catch (e2) {
