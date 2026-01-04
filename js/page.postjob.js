@@ -136,8 +136,57 @@
     };
   }
 
+  // ---------------------------
+  // REST Insert (harter Debug / zuverlässiger)
+  // ---------------------------
+  async function insertJobViaRest(supabase, uid, baseJob) {
+    const supabaseUrl = supabase?.supabaseUrl;
+    const supabaseKey = supabase?.supabaseKey;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Supabase client missing supabaseUrl/supabaseKey");
+    }
+
+    const { data, error } = await supabase.auth.getSession();
+    if (error) throw error;
+
+    const token = data?.session?.access_token;
+    if (!token) throw new Error("No access token (not logged in)");
+
+    const payload = payloadSnakeCase(uid, baseJob);
+
+    const r = await fetch(`${supabaseUrl}/rest/v1/jobs?select=id`, {
+      method: "POST",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const text = await r.text();
+
+    if (!r.ok) {
+      let m = text;
+      try {
+        const j = JSON.parse(text);
+        m = j.message || j.error || JSON.stringify(j);
+      } catch {}
+      throw new Error(`REST ${r.status}: ${m}`);
+    }
+
+    const rows = JSON.parse(text);
+    const created = rows?.[0];
+    if (!created?.id) throw new Error("Insert ok, but no id returned");
+    return created;
+  }
+
+  // ---------------------------
+  // Fallback (supabase-js) Insert/Update
+  // ---------------------------
   async function insertJobWithFallback(supabase, uid, job) {
-    // 1) snake_case + Response erzwingen
     let r1 = await supabase
       .from("jobs")
       .insert(payloadSnakeCase(uid, job))
@@ -148,7 +197,6 @@
 
     const msg = String(r1.error.message || "");
 
-    // 2) Spaltennamen-Fallback
     if (
       msg.includes('column "hours_per_week"') ||
       msg.includes('column "image_url"') ||
@@ -160,12 +208,10 @@
         .insert(payloadCamelCase(uid, job))
         .select("id")
         .single();
-
       if (r2.error) throw r2.error;
       return r2.data;
     }
 
-    // 3) requirements Typ-Fallback (String)
     if (msg.toLowerCase().includes("requirements")) {
       const fb = payloadSnakeCase(uid, job);
       fb.requirements = job.requirements.join(", ");
@@ -180,7 +226,6 @@
   async function updateJobWithFallback(supabase, uid, editId, job, isAdmin) {
     const eqOwner = !isAdmin;
 
-    // snake_case
     let q1 = supabase.from("jobs").update(payloadSnakeCase(uid, job)).eq("id", editId);
     if (eqOwner) q1 = q1.eq("owner_id", uid);
 
@@ -189,7 +234,6 @@
 
     const msg = String(r1.error.message || "");
 
-    // camelCase
     if (
       msg.includes('column "hours_per_week"') ||
       msg.includes('column "image_url"') ||
@@ -204,7 +248,6 @@
       return r2.data;
     }
 
-    // requirements fallback
     if (msg.toLowerCase().includes("requirements")) {
       const fb = payloadSnakeCase(uid, job);
       fb.requirements = job.requirements.join(", ");
@@ -459,10 +502,12 @@
         setMsg(msg, editId ? "Speichere Änderungen…" : "Veröffentliche Job…", null);
 
         if (editId) {
+          // Update weiter per supabase-js (ok)
           const updated = await updateJobWithFallback(supabase, uid, editId, baseJob, isAdmin);
           setMsg(msg, "✅ Gespeichert (ID: " + updated.id + ")", true);
         } else {
-          const created = await insertJobWithFallback(supabase, uid, baseJob);
+          // INSERT: per REST (liefert immer Status/Fehler)
+          const created = await insertJobViaRest(supabase, uid, baseJob);
           setMsg(msg, "✅ Veröffentlicht (ID: " + created.id + ")", true);
         }
 
@@ -480,7 +525,6 @@
   // Auto-init (wichtig!)
   (async () => {
     try {
-      // warte bis DOM da ist
       if (document.readyState === "loading") {
         await new Promise((r) => document.addEventListener("DOMContentLoaded", r, { once: true }));
       }
