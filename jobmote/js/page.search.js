@@ -57,7 +57,7 @@
           score: occurrences(hay, q),
           title: `Job: ${job.title}`,
           url: `index.html?q=${encodeURIComponent(qRaw)}#${encodeURIComponent(job.id)}`,
-          snippet: `${job.employer} – ${JM.formatEuro(job.pay)} / Std – ${job.category} – ${JM.regionLabel(job.region)}`,
+          snippet: `${job.company} – ${JM.formatEuro(job.pay)} / Std – ${job.category} – ${JM.regionLabel(job.region)}`,
           createdAt: job.createdAt,
           pay: Number(job.pay) || 0
         });
