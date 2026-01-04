@@ -78,7 +78,7 @@
 
     const payload = {
       owner_id: u.id,
-      employer: job.employer,
+      company: job.company,
       title: job.title,
       description: job.description,
       pay: job.pay,
@@ -95,7 +95,7 @@
     const { data, error } = await supabase
       .from("jobs")
       .insert(payload)
-      .select("id, employer, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
+      .select("id, company, title, description, pay, hours_per_week, category, language, region, image_url, requirements, link, created_at, updated_at, featured, owner_id")
       .single();
     if (error) throw error;
 
