@@ -52,7 +52,7 @@
        PREVIEW JOB (gekürzt)
        ====================== */
     function draftJob() {
-      const company = JM.$("#pj-employer")?.value || "").trim() || "Beispiel GmbH";
+      const company = JM.$("#pj-company")?.value || "").trim() || "Beispiel GmbH";
       const title = (JM.$("#pj-title")?.value || "").trim() || "Jobtitel (Vorschau)";
       const pay = Number((JM.$("#pj-pay")?.value || "").trim() || 16);
       const hoursPerWeek = Number((JM.$("#pj-hours")?.value || "").trim() || 8);
@@ -74,7 +74,7 @@
 
       return {
         id: "preview",
-        employer,
+        company,
         title,
         pay: isFinite(pay) ? pay : 0,
         hoursPerWeek: isFinite(hoursPerWeek) ? hoursPerWeek : 0,
@@ -98,7 +98,7 @@
 
     [
       "#pj-title",
-      "#pj-employer",
+      "#pj-company",
       "#pj-pay",
       "#pj-hours",
       "#pj-category",
@@ -163,7 +163,7 @@
       const existing = mine.find(j => String(j.id) === String(editId));
 
       if (existing) {
-        JM.$("#pj-employer").value = existing.employer || "";
+        JM.$("#pj-company").value = existing.company || "";
         JM.$("#pj-title").value = existing.title || "";
         JM.$("#pj-pay").value = existing.pay ?? "";
         JM.$("#pj-hours").value = existing.hoursPerWeek ?? "";
@@ -200,7 +200,7 @@
       }
 
       const baseJob = {
-        employer: (JM.$("#pj-employer")?.value || "").trim(),
+        company: (JM.$("#pj-company")?.value || "").trim(),
         title: (JM.$("#pj-title")?.value || "").trim(),
         pay: Number((JM.$("#pj-pay")?.value || "").trim()),
         hoursPerWeek: Number((JM.$("#pj-hours")?.value || "").trim()),
