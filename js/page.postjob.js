@@ -66,7 +66,7 @@
     const description = ($("#pj-desc")?.value || "").trim();
 
     return {
-      company: ($("#pj-employer")?.value || "").trim(),
+      company: ($("#pj-company")?.value || "").trim(),
       title: ($("#pj-title")?.value || "").trim(),
       pay: Number((($("#pj-pay")?.value || "").trim())),
       hoursPerWeek: Number((($("#pj-hours")?.value || "").trim())),
@@ -282,7 +282,7 @@
     const desc = job.description ?? "";
     const req = job.requirements ?? [];
 
-    $("#pj-employer").value = company;
+    $("#pj-company").value = company;
     $("#pj-title").value = title;
     $("#pj-pay").value = pay;
     $("#pj-hours").value = hours;
@@ -308,7 +308,7 @@
   // Live Preview
   // ---------------------------
   function draftJobFromForm(logoDataUrl) {
-    const company = ($("#pj-employer")?.value || "").trim() || "Beispiel GmbH";
+    const company = ($("#pj-company")?.value || "").trim() || "Beispiel GmbH";
     const title = ($("#pj-title")?.value || "").trim() || "Jobtitel (Vorschau)";
     const pay = Number((($("#pj-pay")?.value || "").trim())) || 16;
     const hoursPerWeek = Number((($("#pj-hours")?.value || "").trim())) || 8;
@@ -416,7 +416,7 @@
     // Live preview listeners
     [
       "#pj-title",
-      "#pj-employer",
+      "#pj-company",
       "#pj-pay",
       "#pj-hours",
       "#pj-category",
