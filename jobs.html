@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jobs</title>
+</head>
+<body>
+  <h1>Jobangebote</h1>
+  <div id="state"></div>
+  <button id="logout" style="display:none;">Logout</button>
+  <ul id="list"></ul>
+
+  <script type="module">
+    import { getSupabase } from "/js/supabase.js";
+    const supabase = await getSupabase();
+
+    const state = document.getElementById("state");
+    const list = document.getElementById("list");
+    const logoutBtn = document.getElementById("logout");
+
+    const { data: sessionData } = await supabase.auth.getSession();
+    const session = sessionData?.session;
+
+    if (!session) {
+      window.location.href = "/lognin/";
+    }
+
+    const user = session.user;
+
+    // Email confirmation required (SDKs can expose confirmed_at instead of email_confirmed_at)
+    const confirmed = user.email_confirmed_at || user.confirmed_at;
+    if (!confirmed) {
+      state.innerHTML = `
+        <h2>Bitte bestätige zuerst deine E-Mail-Adresse</h2>
+        <p>Checke dein Postfach (auch Spam).</p>
+        <button id="resend">Bestätigung erneut senden</button>
+      `;
+
+      logoutBtn.style.display = "inline-block";
+      logoutBtn.onclick = async () => {
+        await supabase.auth.signOut();
+        window.location.href = "/login/";
+      };
+
+      document.getElementById("resend").onclick = async () => {
+        const { error } = await supabase.auth.resend({ type: "signup", email: user.email });
+        alert(error ? error.message : "Mail erneut gesendet.");
+      };
+
+      throw new Error("Email not confirmed");
+    }
+
+    logoutBtn.style.display = "inline-block";
+    logoutBtn.onclick = async () => {
+      await supabase.auth.signOut();
+      window.location.href = "/login/";
+    };
+
+    state.textContent = "Lade Jobs…";
+
+    const { data: jobs, error } = await supabase
+      .from("jobs")
+      .select("id, title, company")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      state.textContent = "Fehler: " + error.message;
+    } else if (!jobs || jobs.length === 0) {
+      state.textContent = "Keine Jobs gefunden.";
+    } else {
+      state.textContent = "";
+      for (const j of jobs) {
+        const li = document.createElement("li");
+        li.textContent = `${j.title} – ${j.company ?? ""}`;
+        list.appendChild(li);
+      }
+    }
+  </script>
+</body>
+</html>
